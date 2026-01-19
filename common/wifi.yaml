@@ -1,0 +1,36 @@
+# Aktiviert den Logger, damit wir sehen, was passiert
+logger:
+  baud_rate: 115200
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  #fast_connect: true
+
+# Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    password: !secret fallback_password
+
+captive_portal:
+
+# Enable Home Assistant API
+api:
+#  encryption:
+#   key: !secret api_key
+
+ota:
+  platform: esphome
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    entity_category: diagnostic
+    disabled_by_default: true
+    update_interval: 60s
+  - platform: uptime
+    # The uptime sensor is extremely helpful to know if your device is rebooting
+    # when it shouldn't be. This might indicate your interval-to-window timing is
+    # too tight, and the window needs to be reduced.
+    name: "Uptime Sensor"
+    entity_category: diagnostic
+    update_interval: 60s   

@@ -1,0 +1,32 @@
+packages:
+  waveshare_base: !include waveshare-esp32-s3-touch-lcd-7.yaml
+  
+defaults:
+  backlight_brightness_pin: "GPIO16"
+  initial_brightness: "0.8"
+  min_power: "0.07"
+
+output:
+  - platform: ledc
+    pin: ${backlight_brightness_pin}
+    id: backlight_brightness_output
+    min_power: ${min_power}
+    zero_means_zero: true
+
+light:
+  - id: !extend lcdbacklight
+    internal: true
+    name: !remove
+  - platform: monochromatic
+    output: backlight_brightness_output
+    id: lcdbacklight_brightness
+    name: LCD Backlight
+    icon: mdi:wall-sconce-flat-outline
+    disabled_by_default: true
+    restore_mode: ALWAYS_ON
+    initial_state:
+      brightness: ${initial_brightness}
+    on_turn_off:
+      - script.execute: start_antiburn
+    on_turn_on:
+      - script.execute: stop_antiburn

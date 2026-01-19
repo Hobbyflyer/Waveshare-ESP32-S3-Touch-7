@@ -1,0 +1,26 @@
+# Widget für TV Licht - nur Sensoren
+substitutions:
+  wz_tv_licht_id: "wz_tv_licht"
+  wz_tv_licht_entity: "light.licht_tv"
+
+  wz_esstisch_licht_id: "wz_esstisch_licht" 
+  wz_esstisch_licht_entity: "light.licht_esstisch"
+
+binary_sensor:
+  - platform: homeassistant
+    id: ${wz_tv_licht_id}_state
+    entity_id: ${wz_tv_licht_entity}
+    trigger_on_initial_state: true
+  - platform: homeassistant
+    id: ${wz_esstisch_licht_id}_state
+    entity_id: ${wz_esstisch_licht_entity}
+    trigger_on_initial_state: true
+sensor:
+  - platform: homeassistant
+    id: ${wz_tv_licht_id}_sensor
+    entity_id: ${wz_tv_licht_entity}
+    attribute: brightness
+  - platform: homeassistant
+    id: ${wz_esstisch_licht_id}_sensor
+    entity_id: ${wz_esstisch_licht_entity}
+    attribute: brightness
