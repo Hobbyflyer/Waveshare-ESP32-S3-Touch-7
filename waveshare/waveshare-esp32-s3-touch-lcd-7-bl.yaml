@@ -22,7 +22,7 @@ light:
     id: lcdbacklight_brightness
     name: LCD Backlight
     icon: mdi:wall-sconce-flat-outline
-    disabled_by_default: true
+    # disabled_by_default: true  # Entfernt, damit das Backlight in HA verfügbar ist
     restore_mode: ALWAYS_ON
     initial_state:
       brightness: ${initial_brightness}

@@ -8,6 +8,7 @@ Dieses Projekt konfiguriert einen ESP32-S3 Touch LCD 7 von Waveshare für die In
 - **Software**: ESPHome (Version 2025.12.7)
 - **Integration**: Home Assistant
 - **Display**: LVGL-basiertes Touch-Interface
+- **lvgl**: https://esphome.io/cookbook/lvgl/
 
 ## Projektstruktur
 ```

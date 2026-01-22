@@ -1,10 +1,7 @@
 packages:
   - !include common/wifi.yaml
   - !include waveshare/waveshare-esp32-s3-touch-lcd-7-bl.yaml
-  # Licht-Widgets
-  - !include widgets/tv_licht.yaml
-  # Weitere Lichter:
-  # - !include widgets/couch_licht.yaml
+  
 
 esphome:
   name: "waveshare-test"
@@ -14,24 +11,6 @@ esphome:
 time:
   - platform: homeassistant
     id: homeassistant_time
-    on_time_sync:
-      - script.execute: time_update
-    on_time:
-      - seconds: 0
-        then:
-          - script.execute: time_update
-      # Turn off the screen at 2 at night. The package makes sure to run the antiburn when the
-      # screen is off automatically, but you do need to remember to turn the screen off.
-      - seconds: 0
-        minutes: 51
-        hours: 11
-        then:
-          - script.execute: display_off
-      - seconds: 0
-        minutes: 0
-        hours: 12
-        then:
-          - script.execute: display_on
 
 image:
   - file: images/main_bg.png
@@ -50,71 +29,6 @@ lvgl:
             src: main_background
             width: 800
             height: 480
-        
-        # Uhr
-        - label:
-            id: clock_label
-            align: TOP_MID
-            y: 10
-            text_font: montserrat_48
-            text:
-              time_format: "%H:%M"
-        
-        # Platzhalter für Thermostat
-        - label:
-            align: CENTER
-            y: -30
-            text: "Thermostat\n22.5°C"
-            text_font: montserrat_48
-        
-        # Szenen-Buttons
-        - button:
-            x: 20
-            y: 200
-            width: 150
-            height: 60
-            widgets:
-              - label:
-                  align: CENTER
-                  text: "Relax"
-        - button:
-            x: 190
-            y: 200
-            width: 150
-            height: 60
-            widgets:
-              - label:
-                  align: CENTER
-                  text: "Film"
-        
-        # Navigation
-        - button:
-            id: nav_to_light
-            align: BOTTOM_LEFT
-            x: 10
-            y: -10
-            width: 100
-            height: 50
-            widgets:
-              - label:
-                  align: CENTER
-                  text: "Licht"
-            on_click:
-              - lvgl.page.show: light_page
-        
-        - button:
-            id: nav_to_cover
-            align: BOTTOM_RIGHT
-            x: -10
-            y: -10
-            width: 100
-            height: 50
-            widgets:
-              - label:
-                  align: CENTER
-                  text: "Rollos"
-            on_click:
-              - lvgl.page.show: cover_page
     
     # ========== LICHT PAGE ==========
     - id: light_page
@@ -125,61 +39,6 @@ lvgl:
             src: main_background
             width: 800
             height: 480
-        
-        # Titel
-        - label:
-            align: TOP_MID
-            y: 10
-            text: "Licht"
-            text_font: montserrat_48
-        
-        # TV Licht Widget
-        - button:
-            id: wz_tv_licht_btn
-            x: 80
-            y: 100
-            width: 100
-            height: 70
-            checkable: true
-            widgets:
-              - label:
-                  align: CENTER
-                  text: "TV Licht"
-            on_click:
-              then:
-                - homeassistant.action:
-                    action: light.toggle
-                    data:
-                      entity_id: light.licht_tv
-        - slider:
-            id: wz_tv_licht_slider
-            x: 80
-            y: 180
-            width: 100
-            height: 200
-            pad_all: 8
-            min_value: 0
-            max_value: 255
-            on_release:
-              then:
-                - homeassistant.action:
-                    action: light.turn_on
-                    data:
-                      entity_id: light.licht_tv
-                      brightness: !lambda return int(x);
-        
-        # Navigation zurück
-        - button:
-            align: BOTTOM_MID
-            y: -10
-            width: 100
-            height: 50
-            widgets:
-              - label:
-                  align: CENTER
-                  text: "Home"
-            on_click:
-              - lvgl.page.show: main_page
     
     # ========== ROLLADEN PAGE ==========
     - id: cover_page
@@ -190,42 +49,4 @@ lvgl:
             src: main_background
             width: 800
             height: 480
-        
-        # Titel
-        - label:
-            align: TOP_MID
-            y: 10
-            text: "Rolladen"
-            text_font: montserrat_48
-        
-        # Platzhalter für Rollladen-Steuerung
-        - label:
-            align: CENTER
-            text: "Rollo-Steuerung\nfolgt..."
-        
-        # Navigation zurück
-        - button:
-            align: BOTTOM_MID
-            y: -10
-            width: 100
-            height: 50
-            widgets:
-              - label:
-                  align: CENTER
-                  text: "Home"
-            on_click:
-              - lvgl.page.show: main_page
 
-script:
-  - id: time_update
-    then:
-      - lvgl.label.update:
-          id: clock_label
-          text:
-            time_format: "%H:%M"
-  - id: display_off
-    then:
-      - light.turn_off: lcdbacklight_brightness
-  - id: display_on
-    then:
-      - light.turn_on: lcdbacklight_brightness
