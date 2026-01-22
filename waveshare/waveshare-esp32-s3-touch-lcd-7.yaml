@@ -72,40 +72,7 @@ light:
     icon: mdi:wall-sconce-flat-outline
     disabled_by_default: true
     restore_mode: ALWAYS_ON
-    on_turn_off:
-      - script.execute: start_antiburn
-    on_turn_on:
-      - script.execute: stop_antiburn
 
-script:
-  - id: start_antiburn
-    then:
-      - delay: 30s  # Reduziert von 5min auf 30s zum Testen
-      - logger.log: Starting automatic antiburn.
-      - switch.turn_on: switch_antiburn
-  - id: stop_antiburn
-    then:
-      - script.stop: start_antiburn
-      - switch.turn_off: switch_antiburn
-
-switch:
-  - platform: template
-    name: Antiburn
-    id: switch_antiburn
-    icon: mdi:television-shimmer
-    optimistic: true
-    entity_category: "config"
-    # disabled_by_default: true  # Entfernt, damit der Switch in HA verfügbar ist
-    turn_on_action:
-      - logger.log: "Starting Antiburn"
-      - light.turn_on:  # Backlight auf 1% Helligkeit setzen für minimalen Stromverbrauch
-          id: lcdbacklight_brightness
-          brightness: 0.01
-    turn_off_action:
-      - logger.log: "Stopping Antiburn"
-      - light.turn_on:  # Backlight auf normale Helligkeit zurücksetzen
-          id: lcdbacklight_brightness
-          brightness: 0.8
 
 lvgl:
 

@@ -26,7 +26,3 @@ light:
     restore_mode: ALWAYS_ON
     initial_state:
       brightness: ${initial_brightness}
-    on_turn_off:
-      - script.execute: start_antiburn
-    on_turn_on:
-      - script.execute: stop_antiburn
