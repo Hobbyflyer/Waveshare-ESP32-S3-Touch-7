@@ -27,6 +27,14 @@ sensor:
     entity_category: diagnostic
     disabled_by_default: true
     update_interval: 60s
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: wifi_signal_label
+            text: !lambda |-
+              char buffer[20];
+              sprintf(buffer, "WiFi: %d dBm", (int)x);
+              return std::string(buffer);
   - platform: uptime
     # The uptime sensor is extremely helpful to know if your device is rebooting
     # when it shouldn't be. This might indicate your interval-to-window timing is

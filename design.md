@@ -22,6 +22,18 @@ Das Display (800x480 Pixel) soll über drei Bildschirmseiten verfügen. Alle Sei
 - **Fallback:** Bei HA-Verbindungsausfall: Offline-Status anzeigen.
 - **Hintergrundbild** unter images main_bg.png
 
+
+
+## Header
+- oben links Wifi-Signalstärke
+
+## Seitennavigation
+- swipe nach links und rechts für vorherige Seite und nächste Seite.
+- letzte Seite führt auf erste Seite
+
+## Seiteninhalt
+
+
 ## Seite 1: Hauptseite (Thermostat & Wetter)
 - **Layout:**
   - **Thermostat-Meter:** Links, 300x300 Pixel, zentriert im linken Bereich (x: 20, y: 80). Meter mit 240°-Bogen, Needle für Ist-Temperatur, Labels für Ist/Soll.

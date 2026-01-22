@@ -8,6 +8,11 @@ esphome:
   friendly_name: "Display_1"  
  
 
+globals:
+  - id: current_page_index
+    type: int
+    initial_value: '0'
+
 time:
   - platform: homeassistant
     id: homeassistant_time
@@ -19,18 +24,90 @@ image:
     resize: 800x480
 
 lvgl:
+  top_layer:
+    widgets:
+      # Header - oben links Wifi-Signal
+      - label:
+          id: wifi_signal_label
+          align: TOP_LEFT
+          x: 10
+          y: 10
+          text_font: montserrat_18
+          text_color: grey
+          text: "WiFi: --"
+          scrollable: false
+      
+      # Footer - Navigation
+      - button:  # Vorheriger Screen (links)
+          id: nav_prev_button
+          x: 10
+          y: 420
+          width: 100
+          height: 40
+          scrollable: false
+          widgets:
+            - label:
+                align: CENTER
+                text: "<"
+                text_font: montserrat_24
+          on_click:
+            - lambda: |-
+                id(current_page_index) = (id(current_page_index) - 1 + 3) % 3;
+                if (id(current_page_index) == 0) {
+                  lv_label_set_text(id(page_name_label), "Main");
+                } else if (id(current_page_index) == 1) {
+                  lv_label_set_text(id(page_name_label), "Light");
+                } else {
+                  lv_label_set_text(id(page_name_label), "Settings");
+                }
+            - lvgl.page.previous:
+      
+      - label:  # Seitenname (mitte)
+          id: page_name_label
+          x: 350
+          y: 430
+          text_font: montserrat_24
+          text_color: grey
+          text: "Main"
+          scrollable: false
+      
+      - button:  # Nächster Screen (rechts)
+          id: nav_next_button
+          x: 690
+          y: 420
+          width: 100
+          height: 40
+          scrollable: false
+          widgets:
+            - label:
+                align: CENTER
+                text: ">"
+                text_font: montserrat_24
+          on_click:
+            - lambda: |-
+                id(current_page_index) = (id(current_page_index) + 1) % 3;
+                if (id(current_page_index) == 0) {
+                  lv_label_set_text(id(page_name_label), "Main");
+                } else if (id(current_page_index) == 1) {
+                  lv_label_set_text(id(page_name_label), "Light");
+                } else {
+                  lv_label_set_text(id(page_name_label), "Settings");
+                }
+            - lvgl.page.next:
+
   pages:
-    # ========== MAIN PAGE - Thermostat & Szenen ==========
+    # ========== MAIN PAGE ==========
     - id: main_page
+      scrollable: false
       widgets:
-        # Hintergrundbild (wenn definiert)
+        # Hintergrundbild
         - image:
             align: CENTER
             src: main_background
             width: 800
             height: 480
     
-    # ========== LICHT PAGE ==========
+    # ========== LIGHT PAGE ==========
     - id: light_page
       widgets:
         # Hintergrundbild
@@ -40,8 +117,8 @@ lvgl:
             width: 800
             height: 480
     
-    # ========== ROLLADEN PAGE ==========
-    - id: cover_page
+    # ========== SETTINGS PAGE ==========
+    - id: settings_page
       widgets:
         # Hintergrundbild
         - image:

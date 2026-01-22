@@ -12,6 +12,8 @@ Dieses Projekt konfiguriert einen ESP32-S3 Touch LCD 7 von Waveshare für die In
 
 ## Projektstruktur
 ```
+agent-context/
+  - footer.md: Anforderungen und Spezifikationen für den persistenten Footer
 common/
   - secrets.yaml: Vertrauliche Daten (WiFi, API-Keys, etc.)
   - wifi.yaml: WiFi-Konfiguration
@@ -25,12 +27,14 @@ widgets/
 ```
 
 ## Häufige Aufgaben
+- Erstellung und Aktualisierung des Footers nach Spezifikationen in footer.md
 - Vereinfachung von YAML-Templates
 - Hinzufügen neuer Widgets für Lichtsteuerung
 - Debugging von Sensor- und Display-Problemen
 - Integration neuer Home Assistant Entities
 
 ## Wichtige Konfigurationen
+- **Footer**: Persistenter top_layer mit drei Buttons (Home, Licht, Einstellungen) für Navigation
 - **Substitutions**: Verwende Variablen wie `${wz_tv_licht_id}`, `${wz_tv_licht_entity}` für Entity-IDs
 - **Binary Sensors**: Für Zustandserkennung von Lichtern
 - **Sensors**: Für Brightness-Werte aus Home Assistant
@@ -42,6 +46,9 @@ widgets/
 - Teste Änderungen durch Kompilierung mit ESPHome
 - Achte auf korrekte Einrückung in YAML (2 Leerzeichen)
 - Bei Vereinfachungen Redundanzen reduzieren, aber Funktionalität erhalten
+- halte Kommentare aktuell und relevant
+- waveshare-esp32-s3 Dateien sollen nur die Hardware-spezifische Konfiguration enthalten
+- seitenkonfigurationen und widgets sollen in separaten Dateien liegen
 
 ## Notizen
 - Alle Änderungen sollten in Git committet werden

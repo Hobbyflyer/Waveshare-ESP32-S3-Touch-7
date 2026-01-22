@@ -1,4 +1,5 @@
 esphome:
+  name: waveshare-esp32-s3-touch-lcd-7
   min_version: "2025.8.0"
   platformio_options:
     board_upload.maximum_ram_size: 524288
@@ -73,8 +74,6 @@ light:
     disabled_by_default: true
     restore_mode: ALWAYS_ON
 
-
-lvgl:
 
 ### Display
 display:
