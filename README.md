@@ -16,28 +16,42 @@ Ein ESPHome-Projekt zur Integration des Waveshare ESP32-S3 Touch LCD 7 mit Home 
 
 ```
 waveshare-esp32-s3-touch-7/
-├── test.yaml                          # Hauptkonfiguration
-├── README.md                          # Diese Datei
-├── design.md                          # Design-Richtlinien
-├── agent-context/
-│   ├── footer.md                     # Footer-Anforderungen (Navigation)
-│   ├── header.md                     # Header-Anforderungen (WiFi-Status)
-│   └── display-timeout.md            # Display-Timeout-Konfiguration
-├── common/
-│   ├── secrets.yaml                  # Vertrauliche Daten (WiFi, API-Keys)
-│   │                                     wifi_ssid: "......"
-│   │                                     wifi_password: "...."
-│   │                                     fallback_password: "....."
-│   │                                     ota_password: "...."
-│   │                                     api_key: "....."
-│   └── wifi.yaml                     # WiFi-Konfiguration
-├── fonts/                            # Benutzerdefinierte Schriftarten (TTF/OTF)
+├── main.yaml                         # ZENTRALE KONFIGURATION (orchestriert alles)
+├── ARCHITECTURE.md                   # Architektur-Dokumentation
+├── README.md                         # Diese Datei
+├── design.md                         # Design-Richtlinien
+│
+├── entities/                         # Zentrale Entitäts-Definitionen
+│   ├── entities.yaml                # Master - aggregiert alle Entitäten
+│   ├── global_vars.yaml             # Globals, Numbers, Display-Logik
+│   ├── thermostat.yaml              # Thermostat-Sensoren
+│   ├── weather.yaml                 # Wetter-Sensoren
+│   └── lights.yaml                  # Lichter + Binary-Sensoren
+│
+├── pages/                            # UI-Seiten (LVGL)
+│   ├── main_page.yaml               # Hauptseite (Thermostat & Wetter)
+│   ├── light_page.yaml              # Lichtsteuerung
+│   └── settings_page.yaml           # Einstellungen (Display-Brightness)
+│
+├── agent-context/                    # Anforderungs-Dokumentation
+│   ├── footer.md                    # Footer-Anforderungen (Navigation)
+│   ├── header.md                    # Header-Anforderungen (WiFi-Status)
+│   └── display-timeout.md           # Display-Timeout-Konfiguration
+│
+├── common/                           # Gemeinsame Konfiguration
+│   ├── secrets.yaml                 # Vertrauliche Daten (gitignore)
+│   │   └── wifi_ssid, wifi_password, api_key, ...
+│   └── wifi.yaml                    # WiFi-Konfiguration
+│
+├── waveshare/                        # Hardware-spezifische Konfiguration
+│   ├── waveshare-esp32-s3-touch-lcd-7.yaml
+│   └── waveshare-esp32-s3-touch-lcd-7-bl.yaml
+│
+├── fonts/                            # Benutzerdefinierte Schriftarten (TTF)
 ├── images/
-│   └── main_bg.png                   # Hintergrundbild
-├── templates/
-│   └── 
-└── widgets/
-    └── 
+│   └── main_bg.png                  # Hintergrundbild (RGB565)
+├── templates/                        # Wiederverwendbare Templates (für Zukunft)
+└── .esphome/                         # ESPHome Build-Output
 ```
 
 ## ✨ Hauptmerkmale
@@ -130,12 +144,12 @@ Beachte die Lizenzen für verwendete Komponenten (LVGL, ESPHome, Fonts).
 
 ## 🐛 Troubleshooting
 
-| Problem | Lösung |
-|---------|--------|
-| Touch reagiert nicht | GT911 Touchscreen prüfen, I2C-Adresse 0x5D |
+| Problem                | Lösung                                          |
+|------------------------|-------------------------------------------------|
+| Touch reagiert nicht   | GT911 Touchscreen prüfen, I2C-Adresse 0x5D      |
 | Display bleibt schwarz | MIPI RGB Display prüfen, Backlight-Pin (GPIO16) |
-| WiFi-Fehler | secrets.yaml prüfen, Netzwerk prüfen |
-| Logs nicht sichtbar | OTA oder COM-Port verbindung prüfen |
+| WiFi-Fehler            | secrets.yaml prüfen, Netzwerk prüfen            |
+| Logs nicht sichtbar    | OTA oder COM-Port verbindung prüfen             |
 
 ---
 

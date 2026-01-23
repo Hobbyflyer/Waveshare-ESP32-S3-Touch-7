@@ -1,0 +1,165 @@
+## Main Configuration für Waveshare ESP32-S3 Touch LCD 7
+## Diese Datei orchestriert alle Komponenten des Projekts
+
+packages:
+  wifi: !include common/wifi.yaml
+  hardware: !include waveshare/waveshare-esp32-s3-touch-lcd-7-bl.yaml
+  entities: !include entities/entities.yaml
+
+esphome:
+  name: "waveshare-test"
+  friendly_name: "Display_1"
+
+# ============================================================================
+# RESOURCES: Time, Fonts, Images
+# ============================================================================
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+# Font resources - will be added when TTF files are available
+# font:
+#   - file: "fonts/montserrat-medium.ttf"
+#     id: montserrat_24
+#     size: 24
+
+image:
+  - file: images/main_bg.png
+    id: main_background
+    type: RGB565
+    resize: 800x480
+
+# ============================================================================
+# LVGL: Display-Framework mit Header, Footer und Pages
+# ============================================================================
+
+lvgl:
+  # Display Idle Timeout
+  on_idle:
+    timeout: !lambda "return id(display_timeout).state * 1000;"
+    then:
+      - lambda: |-
+          // Nur wenn Display aktiv ist
+          if (id(display_active)) {
+            id(display_active) = false;
+            id(original_brightness) = id(lcdbacklight_brightness).current_values.get_brightness();
+            
+            float dim_level = id(display_dim_level).state / 100.0;
+            if (dim_level == 0) {
+              // Ausschalten
+              auto call = id(lcdbacklight_brightness).turn_off();
+              call.perform();
+            } else {
+              // Dimmen
+              auto call = id(lcdbacklight_brightness).turn_on();
+              call.set_brightness(dim_level);
+              call.perform();
+            }
+          }
+
+  # Persistente Elemente: Header und Footer auf allen Seiten sichtbar
+  top_layer:
+    widgets:
+      # Header - durchgehende Leiste
+      - obj:
+          x: 3
+          y: 3
+          width: 794
+          height: 30
+          scrollable: false
+          bg_color: 0x2B2B2B
+          border_width: 1
+          border_color: 0x404040
+          widgets:
+            - label:
+                id: wifi_signal_label
+                align: LEFT_MID
+                x: 10
+                text_color: 0xAAAAAA
+                text: "WiFi: --"
+      
+      # Footer Navigation - Vorheriger Screen (links)
+      - button:
+          id: nav_prev_button
+          x: 3
+          y: 437
+          width: 119
+          height: 40
+          scrollable: false
+          bg_color: 0x2B2B2B
+          border_width: 1
+          border_color: 0x404040
+          radius: 5
+          widgets:
+            - label:
+                align: CENTER
+                text: "<"
+                text_font: montserrat_24
+                text_color: 0xAAAAAA
+          on_click:
+            - lambda: |-
+                id(current_page_index) = (id(current_page_index) - 1 + 3) % 3;
+                if (id(current_page_index) == 0) {
+                  lv_label_set_text(id(page_name_label), "Main");
+                } else if (id(current_page_index) == 1) {
+                  lv_label_set_text(id(page_name_label), "Light");
+                } else {
+                  lv_label_set_text(id(page_name_label), "Settings");
+                }
+            - lvgl.page.previous:
+      
+      # Footer - Seitennamen Container (mitte)
+      - obj:
+          x: 124
+          y: 437
+          width: 552
+          height: 40
+          bg_color: 0x2B2B2B
+          border_width: 1
+          border_color: 0x404040
+          radius: 5
+          scrollable: false
+          widgets:
+            - label:
+                id: page_name_label
+                align: CENTER
+                text_color: 0xAAAAAA
+                text: "Main"
+                text_font: montserrat_24
+                
+      # Footer Navigation - Nächster Screen (rechts)
+      - button:
+          id: nav_next_button
+          x: 678
+          y: 437
+          width: 119
+          height: 40
+          scrollable: false
+          bg_color: 0x2B2B2B
+          border_width: 1
+          border_color: 0x404040
+          radius: 5
+          widgets:
+            - label:
+                align: CENTER
+                text: ">"
+                text_color: 0xAAAAAA
+                text_font: montserrat_24
+          on_click:
+            - lambda: |-
+                id(current_page_index) = (id(current_page_index) + 1) % 3;
+                if (id(current_page_index) == 0) {
+                  lv_label_set_text(id(page_name_label), "Main");
+                } else if (id(current_page_index) == 1) {
+                  lv_label_set_text(id(page_name_label), "Light");
+                } else {
+                  lv_label_set_text(id(page_name_label), "Settings");
+                }
+            - lvgl.page.next:
+
+  # Pages
+  pages:
+    - !include pages/main_page.yaml
+    - !include pages/light_page.yaml
+    - !include pages/settings_page.yaml

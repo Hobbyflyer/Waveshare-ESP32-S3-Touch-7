@@ -1,0 +1,8 @@
+# Master-Aggregation aller Entitäten
+# Diese Datei aggregiert alle Entity-Definitionen
+
+packages:
+  global_vars: !include global_vars.yaml
+  thermostat: !include thermostat.yaml
+  weather: !include weather.yaml
+  lights: !include lights.yaml

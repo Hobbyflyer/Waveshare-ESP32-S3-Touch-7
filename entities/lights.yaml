@@ -1,0 +1,82 @@
+# Lichter-Sensoren und Binary Sensoren
+# Verantwortung: Status und Helligkeit aller Lichter
+
+binary_sensor:
+  # TV-Licht Status
+  - platform: homeassistant
+    entity_id: light.licht_tv
+    id: light_tv_state
+    # on_state wird später in light_page.yaml gehandelt
+
+  # Wand-Licht rechts Status
+  - platform: homeassistant
+    entity_id: light.licht_wand_rechts
+    id: light_wand_rechts_state
+
+  # Wand-Licht Mitte Status
+  - platform: homeassistant
+    entity_id: light.licht_wand_mitte
+    id: light_wand_mitte_state
+
+  # Wand-Licht Links Status
+  - platform: homeassistant
+    entity_id: light.licht_wand_links
+    id: light_wand_links_state
+
+  # Tür-Licht Status
+  - platform: homeassistant
+    entity_id: light.licht_tuer
+    id: light_tuer_state
+
+  # Schrank-Licht Status
+  - platform: homeassistant
+    entity_id: light.licht_schrank_mitte
+    id: light_schrank_mitte_state
+
+  # Esstisch-Licht Status
+  - platform: homeassistant
+    entity_id: light.licht_esstisch
+    id: light_esstisch_state
+
+sensor:
+  # TV-Licht Helligkeit
+  - platform: homeassistant
+    entity_id: light.licht_tv
+    attribute: brightness
+    id: light_tv_brightness
+
+  # Wand-Licht rechts Helligkeit
+  - platform: homeassistant
+    entity_id: light.licht_wand_rechts
+    attribute: brightness
+    id: light_wand_rechts_brightness
+
+  # Wand-Licht Mitte Helligkeit
+  - platform: homeassistant
+    entity_id: light.licht_wand_mitte
+    attribute: brightness
+    id: light_wand_mitte_brightness
+
+  # Wand-Licht Links Helligkeit
+  - platform: homeassistant
+    entity_id: light.licht_wand_links
+    attribute: brightness
+    id: light_wand_links_brightness
+
+  # Tür-Licht Helligkeit
+  - platform: homeassistant
+    entity_id: light.licht_tuer
+    attribute: brightness
+    id: light_tuer_brightness
+
+  # Schrank-Licht Helligkeit
+  - platform: homeassistant
+    entity_id: light.licht_schrank_mitte
+    attribute: brightness
+    id: light_schrank_mitte_brightness
+
+  # Esstisch-Licht Helligkeit
+  - platform: homeassistant
+    entity_id: light.licht_esstisch
+    attribute: brightness
+    id: light_esstisch_brightness

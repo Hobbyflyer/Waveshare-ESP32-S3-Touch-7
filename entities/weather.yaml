@@ -1,0 +1,18 @@
+# Wetter-Sensoren und Live-Updates
+# Verantwortung: Temperatur, Luftfeuchtigkeit und Wetterzustand
+
+sensor:
+  # Aktuelle Außentemperatur
+  - platform: homeassistant
+    entity_id: sensor.weather_temperature
+    id: weather_temperature
+
+  # Luftfeuchtigkeit
+  - platform: homeassistant
+    entity_id: sensor.weather_humidity
+    id: weather_humidity
+
+  # Wetterzustand (Text)
+  - platform: homeassistant
+    entity_id: sensor.weather_condition
+    id: weather_condition

@@ -1,0 +1,56 @@
+# Lichtsteuerungsseite
+# Verantwortung: Lichter-Gruppen mit Toggle-Buttons und Helligkeit-Schiebereglern
+# Swipe-Navigation: Links = nächste Seite, Rechts = vorherige Seite
+
+id: light_page
+scrollable: false
+on_gesture:
+  then:
+    # Swipe nach links → nächste Seite
+    - if:
+        condition:
+          lambda: |-
+            lv_indev_t *indev = lv_indev_get_act();
+            return indev != nullptr && lv_indev_get_gesture_dir(indev) == LV_DIR_LEFT;
+        then:
+          - lambda: |-
+              id(current_page_index) = (id(current_page_index) + 1) % 3;
+              if (id(current_page_index) == 0) {
+                lv_label_set_text(id(page_name_label), "Main");
+              } else if (id(current_page_index) == 1) {
+                lv_label_set_text(id(page_name_label), "Light");
+              } else {
+                lv_label_set_text(id(page_name_label), "Settings");
+              }
+          - lvgl.page.next:
+    
+    # Swipe nach rechts → vorherige Seite
+    - if:
+        condition:
+          lambda: |-
+            lv_indev_t *indev = lv_indev_get_act();
+            return indev != nullptr && lv_indev_get_gesture_dir(indev) == LV_DIR_RIGHT;
+        then:
+          - lambda: |-
+              id(current_page_index) = (id(current_page_index) - 1 + 3) % 3;
+              if (id(current_page_index) == 0) {
+                lv_label_set_text(id(page_name_label), "Main");
+              } else if (id(current_page_index) == 1) {
+                lv_label_set_text(id(page_name_label), "Light");
+              } else {
+                lv_label_set_text(id(page_name_label), "Settings");
+              }
+          - lvgl.page.previous:
+
+widgets:
+  # Hintergrundbild
+  - image:
+      align: CENTER
+      src: main_background
+      width: 800
+      height: 480
+  
+  # TODO: Wohnbereich-Lichter (4 Spots)
+  # TODO: Schrank-Licht
+  # TODO: Essbereich-Licht
+  # TODO: TV-Licht

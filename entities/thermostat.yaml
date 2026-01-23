@@ -1,0 +1,15 @@
+# Thermostat-Sensoren und Zustandsverwaltung
+# Verantwortung: Live-Updates von Temperatur und Sollwert
+
+sensor:
+  # Aktuelle Raumtemperatur vom Thermostat
+  - platform: homeassistant
+    entity_id: climate.thermostat
+    attribute: current_temperature
+    id: thermostat_current_temp
+
+  # Soll-Temperatur vom Thermostat
+  - platform: homeassistant
+    entity_id: climate.thermostat
+    attribute: target_temperature
+    id: thermostat_target_temp
