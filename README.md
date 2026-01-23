@@ -25,13 +25,19 @@ waveshare-esp32-s3-touch-7/
 │   └── display-timeout.md            # Display-Timeout-Konfiguration
 ├── common/
 │   ├── secrets.yaml                  # Vertrauliche Daten (WiFi, API-Keys)
+│   │                                     wifi_ssid: "......"
+│   │                                     wifi_password: "...."
+│   │                                     fallback_password: "....."
+│   │                                     ota_password: "...."
+│   │                                     api_key: "....."
 │   └── wifi.yaml                     # WiFi-Konfiguration
 ├── fonts/                            # Benutzerdefinierte Schriftarten (TTF/OTF)
-├── images/                           # Hintergrundbilder und Assets
+├── images/
+│   └── main_bg.png                   # Hintergrundbild
 ├── templates/
-│   └── slider_template.yaml          # LVGL Slider-Widget-Vorlagen
+│   └── 
 └── widgets/
-    └── tv_licht.yaml                # Widget-Beispiel für Lichtsteuerung
+    └── 
 ```
 
 ## ✨ Hauptmerkmale
