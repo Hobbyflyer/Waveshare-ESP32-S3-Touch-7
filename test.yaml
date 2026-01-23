@@ -26,30 +26,42 @@ image:
 lvgl:
   top_layer:
     widgets:
-      # Header - oben links Wifi-Signal
-      - label:
-          id: wifi_signal_label
-          align: TOP_LEFT
-          x: 10
-          y: 10
-          text_font: montserrat_18
-          text_color: grey
-          text: "WiFi: --"
+      # Header - durchgehende Leiste
+      - obj:
+          x: 3
+          y: 3
+          width: 794
+          height: 30
           scrollable: false
+          bg_color: 0x2B2B2B
+          border_width: 1
+          border_color: 0x404040
+          widgets:
+            - label:
+                id: wifi_signal_label
+                align: LEFT_MID
+                x: 10
+                text_font: montserrat_16
+                text_color: 0xAAAAAA
+                text: "WiFi: --"
       
       # Footer - Navigation
       - button:  # Vorheriger Screen (links)
           id: nav_prev_button
-          x: 10
-          y: 420
-          width: 100
+          x: 3
+          y: 437
+          width: 119
           height: 40
           scrollable: false
+          bg_color: 0x2B2B2B
+          border_width: 1
+          border_color: 0x404040
+          radius: 5
           widgets:
             - label:
                 align: CENTER
                 text: "<"
-                text_font: montserrat_24
+                text_font: montserrat_20
           on_click:
             - lambda: |-
                 id(current_page_index) = (id(current_page_index) - 1 + 3) % 3;
@@ -62,27 +74,40 @@ lvgl:
                 }
             - lvgl.page.previous:
       
-      - label:  # Seitenname (mitte)
-          id: page_name_label
-          x: 350
-          y: 430
-          text_font: montserrat_24
-          text_color: grey
-          text: "Main"
+      - obj:  # Seitennamen-Container mit Hintergrund (mitte)
+          x: 124
+          y: 437
+          width: 552
+          height: 40
+          bg_color: 0x2B2B2B
+          border_width: 1
+          border_color: 0x404040
+          radius: 5
           scrollable: false
+          widgets:
+            - label:
+                id: page_name_label
+                align: CENTER
+                text_font: montserrat_20
+                text_color: 0xAAAAAA
+                text: "Main"
       
       - button:  # Nächster Screen (rechts)
           id: nav_next_button
-          x: 690
-          y: 420
-          width: 100
+          x: 678
+          y: 437
+          width: 119
           height: 40
           scrollable: false
+          bg_color: 0x2B2B2B
+          border_width: 1
+          border_color: 0x404040
+          radius: 5
           widgets:
             - label:
                 align: CENTER
                 text: ">"
-                text_font: montserrat_24
+                text_font: montserrat_20
           on_click:
             - lambda: |-
                 id(current_page_index) = (id(current_page_index) + 1) % 3;
@@ -109,6 +134,7 @@ lvgl:
     
     # ========== LIGHT PAGE ==========
     - id: light_page
+      scrollable: false
       widgets:
         # Hintergrundbild
         - image:
@@ -119,6 +145,7 @@ lvgl:
     
     # ========== SETTINGS PAGE ==========
     - id: settings_page
+      scrollable: false
       widgets:
         # Hintergrundbild
         - image:
