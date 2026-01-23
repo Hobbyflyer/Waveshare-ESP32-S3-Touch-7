@@ -1,0 +1,137 @@
+# Waveshare ESP32-S3 Touch LCD 7 - ESPHome Projekt
+
+Ein ESPHome-Projekt zur Integration des Waveshare ESP32-S3 Touch LCD 7 mit Home Assistant. Das Projekt bietet ein Touch-Interface zur Steuerung von Lichtern und anderen Geräten.
+
+## 🛠️ Technische Details
+
+- **Hardware**: Waveshare ESP32-S3 Touch LCD 7 (800x480 Pixel)
+- **Software**: ESPHome (Version 2025.12.7)
+- **Display-Framework**: LVGL (Light and Versatile Graphics Library)
+- **Integration**: Home Assistant
+- **Touch-Sensor**: GT911 Touchscreen
+- **Display-Controller**: MIPI RGB (ESP32-S3-TOUCH-LCD-7-800X480)
+- **Speicher**: 8 MB PSRAM
+
+## 📁 Projektstruktur
+
+```
+waveshare-esp32-s3-touch-7/
+├── test.yaml                          # Hauptkonfiguration
+├── README.md                          # Diese Datei
+├── design.md                          # Design-Richtlinien
+├── agent-context/
+│   ├── footer.md                     # Footer-Anforderungen (Navigation)
+│   ├── header.md                     # Header-Anforderungen (WiFi-Status)
+│   └── display-timeout.md            # Display-Timeout-Konfiguration
+├── common/
+│   ├── secrets.yaml                  # Vertrauliche Daten (WiFi, API-Keys)
+│   └── wifi.yaml                     # WiFi-Konfiguration
+├── fonts/                            # Benutzerdefinierte Schriftarten (TTF/OTF)
+├── images/                           # Hintergrundbilder und Assets
+├── templates/
+│   └── slider_template.yaml          # LVGL Slider-Widget-Vorlagen
+└── widgets/
+    └── tv_licht.yaml                # Widget-Beispiel für Lichtsteuerung
+```
+
+## ✨ Hauptmerkmale
+
+### 📊 Persistenter Header
+- Durchgehende Leiste am oberen Rand (30 Pixel)
+- Zeigt WiFi-Signalstärke an
+- Sichtbar auf allen drei Seiten (Main, Light, Settings)
+
+### 🧭 Persistenter Footer
+- Navigation mit drei Buttons (Vorherige, Seitennummer, Nächste)
+- Verbindung mit Seiten-Navigation
+- Swipe-Gesten-Unterstützung (horizontal)
+
+### 📱 Seiten-Navigation
+- **Main Page**: Hauptdisplay (z. B. Überblick)
+- **Light Page**: Lichtsteuerung mit Schiebereglern
+- **Settings Page**: Konfigurationsoptionen
+
+### 👆 Eingabe-Methoden
+- **Touch-Buttons**: Navigation und Gerätesteuerung
+- **Swipe-Gesten**: Links/Rechts zum Umschalten zwischen Seiten
+- **Slider**: Kontinuierliche Helligkeitssteuerung
+
+### ⏱️ Display-Management
+- **Timeout**: Automatisches Dimmen/Ausschalten nach Inaktivität (konfigurierbar: 10-300 Sekunden)
+- **Dim-Level**: Helligkeit beim Dimmen einstellen (0-100%)
+- **Auto-Wake**: Automatisches Aufwachen durch Touch
+
+## 🎨 Design-Elemente
+
+- **Farbschema**: Anthrazit-Hintergrund (0x2B2B2B) mit grauen Elementen (0xAAAAAA)
+- **Border**: 1px heller (0x404040)
+- **Schriftarten**: Montserrat (16, 20, ...)
+- **Hintergründe**: RGB565-Bilder aus `images/main_bg.png`
+
+## 🔧 Konfiguration
+
+### WiFi
+Bearbeite `common/secrets.yaml`:
+```yaml
+wifi_ssid: "Dein SSID"
+wifi_password: "Dein Passwort"
+```
+
+### Display-Timeout
+- Timeout: 60 Sekunden (Standard)
+- Dim-Level: 10% (Standard)
+- Über Home Assistant anpassbar
+
+### Fonts
+TTF-Dateien in `fonts/` werden automatisch eingebunden. Neue Fonts:
+```yaml
+font:
+  - file: "fonts/dein_font.ttf"
+    id: my_font_24
+    size: 24
+```
+
+## 🚀 Build & Flash
+
+```bash
+# Kompilieren und Flashen
+esphome run test.yaml
+
+# Nur Logs ansehen
+esphome logs test.yaml
+
+# OTA-Update
+esphome run test.yaml --upload-certificate <cert>
+```
+
+## 📝 Wichtige Hinweise
+
+- **Secrets**: `secrets.yaml` enthält vertrauliche Daten – nicht ins Repository pushen!
+- **Indentation**: YAML nutzt 2 Leerzeichen (wichtig!)
+- **Entity-IDs**: Nutze Variablen wie `${wz_tv_licht_id}` für einfache Verwaltung
+- **LVGL**: Offizielle Dokumentation: https://esphome.io/cookbook/lvgl/
+
+## 🔌 Integration mit Home Assistant
+
+Das Projekt verbindet sich automatisch mit Home Assistant via ESPHome API:
+- **Hostname**: `waveshare-test.local`
+- **Port**: 6053 (API)
+- **WiFi-Sensor**: Signalstärke wird aktualisiert
+
+## 📄 Lizenz
+
+Beachte die Lizenzen für verwendete Komponenten (LVGL, ESPHome, Fonts).
+
+## 🐛 Troubleshooting
+
+| Problem | Lösung |
+|---------|--------|
+| Touch reagiert nicht | GT911 Touchscreen prüfen, I2C-Adresse 0x5D |
+| Display bleibt schwarz | MIPI RGB Display prüfen, Backlight-Pin (GPIO16) |
+| WiFi-Fehler | secrets.yaml prüfen, Netzwerk prüfen |
+| Logs nicht sichtbar | OTA oder COM-Port verbindung prüfen |
+
+---
+
+**Zuletzt aktualisiert**: Januar 2026  
+**ESPHome Version**: 2025.12.7
