@@ -12,10 +12,72 @@ globals:
   - id: current_page_index
     type: int
     initial_value: '0'
+  - id: last_touch_time
+    type: unsigned long
+    initial_value: '0'
+  - id: display_active
+    type: bool
+    initial_value: 'true'
+  - id: original_brightness
+    type: float
+    initial_value: '0.8'
 
 time:
   - platform: homeassistant
     id: homeassistant_time
+
+interval:
+  - interval: 1s
+    then:
+      - lambda: |-
+          if (id(display_active)) {
+            unsigned long now = millis();
+            unsigned long timeout = id(display_timeout).state * 1000;
+            if (now - id(last_touch_time) > timeout) {
+              // Timeout erreicht
+              id(display_active) = false;
+              id(original_brightness) = id(lcdbacklight_brightness).current_values.get_brightness();
+              
+              float dim_level = id(display_dim_level).state / 100.0;
+              if (dim_level == 0) {
+                // Ausschalten
+                auto call = id(lcdbacklight_brightness).turn_off();
+                call.perform();
+              } else {
+                // Dimmen
+                auto call = id(lcdbacklight_brightness).turn_on();
+                call.set_brightness(dim_level);
+                call.perform();
+              }
+            }
+          }
+
+number:
+  - platform: template
+    name: "Display Timeout"
+    id: display_timeout
+    optimistic: true
+    min_value: 10
+    max_value: 300
+    step: 10
+    initial_value: 60
+    unit_of_measurement: "s"
+    icon: mdi:timer-off
+    restore_value: true
+  - platform: template
+    name: "Display Dim Level"
+    id: display_dim_level
+    optimistic: true
+    min_value: 0
+    max_value: 100
+    step: 5
+    initial_value: 10
+    unit_of_measurement: "%"
+    icon: mdi:brightness-6
+    restore_value: true
+    on_value:
+      - lambda: |-
+          // 0% bedeutet Ausschalten
 
 image:
   - file: images/main_bg.png
@@ -24,6 +86,27 @@ image:
     resize: 800x480
 
 lvgl:
+  on_idle:
+    timeout: !lambda "return id(display_timeout).state * 1000;"
+    then:
+      - lambda: |-
+          // Nur wenn Display aktiv ist
+          if (id(display_active)) {
+            id(display_active) = false;
+            id(original_brightness) = id(lcdbacklight_brightness).current_values.get_brightness();
+            
+            float dim_level = id(display_dim_level).state / 100.0;
+            if (dim_level == 0) {
+              // Ausschalten
+              auto call = id(lcdbacklight_brightness).turn_off();
+              call.perform();
+            } else {
+              // Dimmen
+              auto call = id(lcdbacklight_brightness).turn_on();
+              call.set_brightness(dim_level);
+              call.perform();
+            }
+          }
   top_layer:
     widgets:
       # Header - durchgehende Leiste

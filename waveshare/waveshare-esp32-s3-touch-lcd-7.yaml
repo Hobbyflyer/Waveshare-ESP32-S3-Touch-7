@@ -136,4 +136,14 @@ touchscreen:
     ch422g: ch422g_hub
     number: 1
     mode: OUTPUT
+  on_touch:
+    - lambda: |-
+        // Display aufwecken bei Touch
+        if (!id(display_active)) {
+          id(display_active) = true;
+          auto call = id(lcdbacklight_brightness).turn_on();
+          call.set_brightness(id(original_brightness));
+          call.perform();
+        }
+        id(last_touch_time) = millis();
 
