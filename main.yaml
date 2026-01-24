@@ -18,11 +18,15 @@ time:
   - platform: homeassistant
     id: homeassistant_time
 
-# Font resources - will be added when TTF files are available
-# font:
-#   - file: "fonts/montserrat-medium.ttf"
-#     id: montserrat_24
-#     size: 24
+
+# Font resources
+# default montserrat_
+font:
+  - file:
+      type: gfonts
+      family: Roboto
+    id: roboto_european_core
+    size: 24
 
 image:
   - file: images/main_bg.png
@@ -30,11 +34,22 @@ image:
     type: RGB565
     resize: 800x480
 
+interval:
+  - interval: 10s
+    then:
+      - lvgl.label.update:
+          id: homeassistant_time_label
+          text: !lambda |-
+            static char time_str[6];
+            auto time = id(homeassistant_time).now();
+            snprintf(time_str, sizeof(time_str), "%02d:%02d", time.hour, time.minute);
+            return time_str;
+
 # ============================================================================
 # LVGL: Display-Framework mit Header, Footer und Pages
 # ============================================================================
-
 lvgl:
+
   # Display Idle Timeout
   on_idle:
     timeout: !lambda "return id(display_timeout).state * 1000;"
@@ -78,6 +93,17 @@ lvgl:
                 x: 10
                 text_color: 0xAAAAAA
                 text: "WiFi: --"
+            - label:
+                id: homeassistant_time_label
+                align: RIGHT_MID
+                x: 10
+                text_color: 0xAAAAAA
+                text_font: roboto_european_core
+                # Wir lassen 'text' hier erst einmal leer oder als Platzhalter
+                text: "--:--"
+                  
+               
+      
       
       # Footer Navigation - Vorheriger Screen (links)
       - button:
@@ -95,7 +121,7 @@ lvgl:
             - label:
                 align: CENTER
                 text: "<"
-                text_font: montserrat_24
+                text_font: roboto_european_core
                 text_color: 0xAAAAAA
           on_click:
             - lambda: |-
@@ -126,7 +152,7 @@ lvgl:
                 align: CENTER
                 text_color: 0xAAAAAA
                 text: "Main"
-                text_font: montserrat_24
+                text_font: roboto_european_core
                 
       # Footer Navigation - Nächster Screen (rechts)
       - button:
@@ -145,7 +171,7 @@ lvgl:
                 align: CENTER
                 text: ">"
                 text_color: 0xAAAAAA
-                text_font: montserrat_24
+                text_font: roboto_european_core
           on_click:
             - lambda: |-
                 id(current_page_index) = (id(current_page_index) + 1) % 3;
