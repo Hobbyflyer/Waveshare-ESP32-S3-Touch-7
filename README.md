@@ -115,13 +115,13 @@ font:
 
 ```bash
 # Kompilieren und Flashen
-esphome run test.yaml
+esphome run main.yaml
 
 # Nur Logs ansehen
-esphome logs test.yaml
+esphome logs main.yaml
 
 # OTA-Update
-esphome run test.yaml --upload-certificate <cert>
+esphome run main.yaml --upload-certificate <cert>
 ```
 
 ## 📝 Wichtige Hinweise
