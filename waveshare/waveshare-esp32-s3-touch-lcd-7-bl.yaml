@@ -3,8 +3,8 @@ packages:
   
 defaults:
   backlight_brightness_pin: "GPIO16"
-  initial_brightness: "0.8"
-  min_power: "0.07"
+  initial_brightness: "0.7"   # 0.7 entspricht ca. 179/255
+  min_power: "0.00"
 
 output:
   - platform: ledc
@@ -25,4 +25,5 @@ light:
     # disabled_by_default: true  # Entfernt, damit das Backlight in HA verfügbar ist
     restore_mode: ALWAYS_ON
     initial_state:
+      state: ON
       brightness: ${initial_brightness}

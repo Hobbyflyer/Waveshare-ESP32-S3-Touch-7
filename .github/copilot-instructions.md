@@ -10,6 +10,7 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 - **Software**: ESPHome (Version 2025.12.7)
 - **Integration**: Home Assistant
 - **Display-Framework**: LVGL (Light and Versatile Graphics Library)
+- **Design-System**: "Frosted Glass" (Dunkle, halbtransparente Panels)
 - **Touch-Sensor**: GT911 Touchscreen
 - **PSRAM**: 8 MB
 - **Dokumentation**: https://esphome.io/cookbook/lvgl/
@@ -33,9 +34,13 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 │   └── settings_page.yaml          # Einstellungen (Display-Brightness)
 │
 ├── agent-context/                    # 📋 ANFORDERUNGEN
+│   ├── display-timeout.md          # Display-Timeout-Logik
 │   ├── footer.md                   # Footer-Spezifikationen
 │   ├── header.md                   # Header-Spezifikationen
-│   └── display-timeout.md          # Display-Timeout-Logik
+│   ├── light-page.md               # Licht-Seite Spezifikation
+│   ├── main-page.md                # Hauptseite Spezifikation
+│   ├── page-structure.md           # Navigationsstruktur
+│   └── settings-page.md            # Einstellungsseite Spezifikation
 │
 ├── common/                           # ⚙️ GEMEINSAME KONFIGURATION
 │   ├── secrets.yaml                # Vertrauliche Daten (gitignore)
@@ -67,6 +72,14 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 - Neue Wetter-Sensoren → `entities/weather.yaml`
 - UI-Updates → einzelne `pages/*.yaml`
 
+### 4. **Cleancode-Prinzipien**
+- Klare Namenskonventionen (Entitäten, Widgets)
+- Konsistente YAML-Struktur (Einrückung, Kommentare)
+- Vermeidung von Hardcoding (zentral definierte IDs)
+- Dokumentation in YAML-Kommentaren
+- Modulare Struktur mit !include
+- code dubletten vermeiden (z.B. gleiche Sensoren in mehreren Dateien)
+- unused code entfernen (z.B. nicht verwendete Sensoren oder Widgets)
 ## Häufige Aufgaben
 
 ### Neue Lichter hinzufügen

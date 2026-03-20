@@ -50,6 +50,103 @@ widgets:
       width: 800
       height: 480
   
-  # TODO: Display-Helligkeit Slider
-  # TODO: Sound Toggle
-  # TODO: Timeout-Einstellungen
+  # ═══════════════════════════════════════════════════════════════
+  # FROSTED GLASS DESIGN - Settings
+  # ═══════════════════════════════════════════════════════════════
+  
+  # Display Brightness Panel
+  - obj:
+      id: settings_page_brightness_panel
+      x: 30
+      y: 70
+      width: 740
+      height: 60
+      bg_color: 0x2a3f5f
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x5599dd
+      border_side: INTERNAL
+      radius: 10
+  
+  - label:
+      id: settings_page_brightness_label
+      x: 50
+      y: 86
+      text: "Display-Helligkeit"
+      text_font: roboto_european_core
+      text_color: 0xf0f0f0
+  
+  - slider:
+      id: settings_page_brightness_slider
+      x: 320
+      y: 90
+      width: 420
+      height: 20
+      min_value: 10
+      max_value: 255
+      bg_color: 0x1a2f4f
+      bg_opa: 60%
+      border_width: 1
+      border_color: 0x5599dd
+      border_side: INTERNAL
+      indicator:
+        bg_color: 0xffd700
+        bg_opa: 90%
+      on_value:
+        then:
+          - lambda: |-
+              auto call = id(lcdbacklight_brightness).turn_on();
+              call.set_brightness(x / 255.0);
+              call.perform();
+  
+  # Display Timeout Panel
+  - obj:
+      id: settings_page_timeout_panel
+      x: 30
+      y: 150
+      width: 740
+      height: 100
+      bg_color: 0x2a3f5f
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x5599dd
+      border_side: INTERNAL
+      radius: 10
+  
+  - label:
+      id: settings_page_timeout_label
+      x: 50
+      y: 168
+      text: "Display-Timeout"
+      text_font: roboto_european_core
+      text_color: 0xf0f0f0
+  
+  - slider:
+      id: settings_page_timeout_slider
+      x: 320
+      y: 170
+      width: 420
+      height: 20
+      min_value: 10
+      max_value: 180
+      bg_color: 0x1a2f4f
+      bg_opa: 60%
+      border_width: 1
+      border_color: 0x5599dd
+      border_side: INTERNAL
+      indicator:
+        bg_color: 0x1ba1d1
+        bg_opa: 90%
+      on_value:
+        then:
+          - lambda: |-
+              id(display_timeout).publish_state(x);
+              lv_label_set_text_fmt(id(settings_page_timeout_value), "%d s", (int)x);
+
+  - label:
+      id: settings_page_timeout_value
+      x: 50
+      y: 204
+      text: "60 s"
+      text_font: roboto_european_core
+      text_color: 0x1ba1d1

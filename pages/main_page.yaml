@@ -50,6 +50,18 @@ widgets:
       width: 800
       height: 480
   
+  # Uhrzeit - 2 cm groß (≈75 Pixel Höhe), oben zentriert positioniert
+  - label:
+      id: main_page_time_display
+      text: "--:--"
+      x: 50
+      y: 100
+      width: 300
+      height: 80
+      text_font: roboto_european_core_96
+      text_align: LEFT
+      text_color: 0xf0f0f0
+
   # TODO: Thermostat-Meter
   # TODO: Wetter-Bereich
   # TODO: Szenen-Buttons

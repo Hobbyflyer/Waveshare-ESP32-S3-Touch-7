@@ -1,124 +1,36 @@
-# Display-Timeout und Dimm-Funktionalität
+# Display Timeout & Dimming
 
-## Übersicht
-Das Display kann nach einer einstellbaren Zeit automatisch gedimmt oder ausgeschaltet werden, um Energie zu sparen und Einbrennen zu verhindern. Bei Touch wird das Display automatisch auf die ursprüngliche Helligkeit zurückgesetzt.
+## Overview
+The display automatically dims or turns off after a period of inactivity to save power. Touching the screen restores the display.
 
-## Funktionale Anforderungen
-- **Timeout**: Nach konfigurierbarer Zeit ohne Touch-Aktivität wird das Display gedimmt oder ausgeschaltet.
-- **Dimm-Level**: Konfigurierbare Helligkeit (0-100%), auf die das Display reduziert wird.
-  - 0% = Display ausschalten
-  - >0% = Display dimmen auf gewählten Prozentsatz
-- **Aufwachen**: Bei Touch-Ereignis wird Display auf ursprüngliche Helligkeit zurückgesetzt.
-- **Helligkeit-Speicherung**: Vor Dimmen/Ausschalten wird aktuelle Helligkeit gespeichert.
+## Implementation Details
 
-## Technische Implementierung
-- **Globals**:
-  - `last_touch_time` (unsigned long): Zeitstempel der letzten Touch-Aktivität
-  - `display_active` (bool): Status ob Display aktiv oder gedimmt/aus
-  - `original_brightness` (float): Gespeicherte Helligkeit vor Dimmen
-- **Number-Entities** (in Home Assistant steuerbar):
-  - `display_timeout`: Timeout in Sekunden (10-300s, Standard: 60s)
-  - `display_dim_level`: Dimm-Level in Prozent (0-100%, Standard: 10%)
-- **LVGL on_idle**: Nutzt natives LVGL-Event für Inaktivitätserkennung
-  - Lambda prüft ob Display aktiv ist
-  - Bei Timeout: Speichert Helligkeit und dimmt/schaltet aus
-- **Touchscreen on_touch**: 
-  - Bei Touch: Prüft ob Display inaktiv ist
-  - Falls ja: Stellt ursprüngliche Helligkeit wieder her
-  - Aktualisiert `last_touch_time` für Timeout-Reset
+### Configuration Entities
+Defined in `entities/global_vars.yaml`:
+-   **`display_timeout`**: Number entity (10-300s). Sets how long the screen stays active.
+-   **`display_dim_level`**: Number entity (0-100%). Sets the brightness level when dimmed (0% = Off).
+-   **`display_active`**: Boolean global. Tracks if the display is currently in Active state.
+-   **`original_brightness`**: Float global. Stores the brightness level before dimming to restore it later.
+-   **`last_touch_time`**: Timestamp of the last interaction (used for manual tracking if native idle isn't sufficient).
 
-## Konfiguration in test.yaml
-```yaml
-globals:
-  - id: last_touch_time
-    type: unsigned long
-    initial_value: '0'
-  - id: display_active
-    type: bool
-    initial_value: 'true'
-  - id: original_brightness
-    type: float
-    initial_value: '0.8'
+### Logic
+**Idle Detection**:
+-   **Method A (LVGL Native)**: In `main.yaml` under `lvgl: on_idle`.
+    -   Timeout is dynamically set from `id(display_timeout).state`.
+    -   When triggered:
+        1.  Saves current brightness to `original_brightness`.
+        2.  Sets `display_active` to `false`.
+        3.  Sets backlight to `display_dim_level`.
+-   **Method B (Manual Interval)**: In `entities/global_vars.yaml`.
+    -   Checks `millis() - last_touch_time > timeout` every second.
+    -   *Note: There seems to be redundancy between Method A and B in the current codebase.*
 
-number:
-  - platform: template
-    name: "Display Timeout"
-    id: display_timeout
-    optimistic: true
-    min_value: 10
-    max_value: 300
-    step: 10
-    initial_value: 60
-    unit_of_measurement: "s"
-    restore_value: true
-  - platform: template
-    name: "Display Dim Level"
-    id: display_dim_level
-    optimistic: true
-    min_value: 0
-    max_value: 100
-    step: 5
-    initial_value: 10
-    unit_of_measurement: "%"
-    restore_value: true
+**Wake-up**:
+-   Typically handled by `on_touch` or `on_interaction` events (check `main.yaml` or global listeners).
+-   Restores brightness from `original_brightness` or a default value.
+-   Sets `display_active` to `true`.
+-   Resets idle timer.
 
-lvgl:
-  on_idle:
-    timeout: !lambda "return id(display_timeout).state * 1000;"
-    then:
-      - lambda: |-
-          if (id(display_active)) {
-            id(display_active) = false;
-            id(original_brightness) = id(lcdbacklight_brightness).current_values.get_brightness();
-            
-            float dim_level = id(display_dim_level).state / 100.0;
-            if (dim_level == 0) {
-              auto call = id(lcdbacklight_brightness).turn_off();
-              call.perform();
-            } else {
-              auto call = id(lcdbacklight_brightness).turn_on();
-              call.set_brightness(dim_level);
-              call.perform();
-            }
-          }
-```
-
-## Konfiguration in waveshare-esp32-s3-touch-lcd-7.yaml
-```yaml
-touchscreen:
-  platform: gt911
-  id: waveshare_touch
-  on_touch:
-    - lambda: |-
-        if (!id(display_active)) {
-          id(display_active) = true;
-          auto call = id(lcdbacklight_brightness).turn_on();
-          call.set_brightness(id(original_brightness));
-          call.perform();
-        }
-        id(last_touch_time) = millis();
-```
-
-## Home Assistant Integration
-- **Entities**: Zwei Number-Entities erscheinen in Home Assistant
-  - "Display Timeout": Einstellbar für gewünschte Timeout-Dauer
-  - "Display Dim Level": Einstellbar für gewünschte Dimm-Helligkeit
-- **Restore**: Beide Werte werden gespeichert und nach Neustart wiederhergestellt
-
-## Abhängigkeiten
-- Backlight-Komponente: `lcdbacklight_brightness` (aus waveshare-esp32-s3-touch-lcd-7-bl.yaml)
-- Touchscreen-Komponente: GT911
-- LVGL-Framework für on_idle-Event
-- Home Assistant API für Number-Entities
-
-## Testen
-- Kompilierung mit ESPHome.
-- Timeout-Funktion testen: Nach eingestellter Zeit sollte Display dimmen/ausgehen.
-- Aufwachen testen: Bei Touch sollte Display auf ursprüngliche Helligkeit zurückkehren.
-- Einstellungen in Home Assistant anpassen und Verhalten prüfen.
-
-## Vorteile
-- **Energiesparen**: Reduziert Stromverbrauch bei Nichtbenutzung.
-- **Einbrenn-Schutz**: Verhindert Einbrennen statischer Inhalte.
-- **Flexibel**: Über Home Assistant jederzeit anpassbar.
-- **Benutzerfreundlich**: Automatisches Aufwachen bei Berührung.
+### Syncing
+-   **Settings Page**: The timeout slider in `settings_page.yaml` updates the `display_timeout` entity.
+-   **Boot**: `on_client_connected` in `main.yaml` syncs the `display_timeout` value to the slider to ensure UI consistency.

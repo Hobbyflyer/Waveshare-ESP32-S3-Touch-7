@@ -1,5 +1,23 @@
 # Globale Variablen und lokale UI-Konfiguration
 # Verantwortung: Display-Status, Navigation, Timeout-Logik
+# Design: Frosted Glass Theme
+
+# ═══════════════════════════════════════════════════════════════
+# COLOR THEME - Frosted Glass Design
+# ═══════════════════════════════════════════════════════════════
+# Basis: Halbdurchsichtige dunkle Panels mit farbigen Akzenten
+# Format: 0xRRGGBB (Hex-Farben)
+
+# Hintergrund & Panel-Farben
+# Primary: Dunkles Blau (Basis für Glasmorphismus)
+#   0x1a2f4f = RGB(26, 47, 79) - Tiefe & Eleganz
+# Secondary: Mittel Blau (Kontrast für Panels)
+#   0x2a3f5f = RGB(42, 63, 95) - Leicht heller
+
+# Akzent-Farben
+# Cyan (Interaktiv):   0x1ba1d1 = RGB(27, 161, 209)
+# Weiß (Text):         0xf0f0f0 = RGB(240, 240, 240)
+# Border-Blau:         0x5599dd = RGB(85, 153, 221)
 
 globals:
   - id: current_page_index
@@ -22,6 +40,7 @@ globals:
     initial_value: '0.8'
     restore_value: false
 
+
 # Display-Timeout und Dimm-Level Einstellungen
 number:
   - platform: template
@@ -31,10 +50,34 @@ number:
     min_value: 10
     max_value: 300
     step: 10
-    initial_value: 60
+    initial_value: 30
     unit_of_measurement: "s"
     icon: mdi:timer-off
-    restore_value: true
+    restore_value: false 
+    on_value:
+      then:
+        - lambda: |-
+            // UI aktualisieren wenn sich der Wert ändert (z.B. durch HA oder Restore)
+            if (id(settings_page_timeout_slider) != nullptr) {
+              lv_slider_set_value(id(settings_page_timeout_slider), (int)x, LV_ANIM_OFF);
+            }
+            if (id(settings_page_timeout_value) != nullptr) {
+              lv_label_set_text_fmt(id(settings_page_timeout_value), "%d s", (int)x);
+            }
+  
+  # Importiere Timeout von Home Assistant bei Start/Verbindung
+  # Dies zwingt den ESPHome Wert auf den HA System-State
+  - platform: homeassistant
+    entity_id: number.display_1_display_timeout
+    id: ha_display_timeout_import
+    internal: true
+    on_value:
+      then:
+        - lambda: |-
+            if (id(display_timeout).state != x) {
+               ESP_LOGD("sync", "Received Timeout from HA force update: %f", x);
+               id(display_timeout).publish_state(x);
+            }
     
   - platform: template
     name: "Display Dim Level"
@@ -54,23 +97,28 @@ interval:
     then:
       - lambda: |-
           if (id(display_active)) {
-            unsigned long now = millis();
-            unsigned long timeout = id(display_timeout).state * 1000;
-            if (now - id(last_touch_time) > timeout) {
-              // Timeout erreicht
-              id(display_active) = false;
-              id(original_brightness) = id(lcdbacklight_brightness).current_values.get_brightness();
-              
-              float dim_level = id(display_dim_level).state / 100.0;
-              if (dim_level == 0) {
-                // Ausschalten
-                auto call = id(lcdbacklight_brightness).turn_off();
-                call.perform();
-              } else {
-                // Dimmen
-                auto call = id(lcdbacklight_brightness).turn_on();
-                call.set_brightness(dim_level);
-                call.perform();
-              }
+            // Brightness Sync (HA/External change -> Slider)
+            if (id(settings_page_brightness_slider) != nullptr) {
+               float brightness = id(lcdbacklight_brightness).current_values.get_brightness();
+               int target_value = (int)(brightness * 255.0);
+               int current_value = lv_slider_get_value(id(settings_page_brightness_slider));
+               
+               // Nur aktualisieren wenn signifikant anders (vermeide Loop) und Display an ist
+               if (abs(current_value - target_value) > 5) {
+                 lv_slider_set_value(id(settings_page_brightness_slider), target_value, LV_ANIM_ON);
+               }
             }
+            
+            // Timeout Logik wird nun über lvgl.on_idle in main.yaml handled
+            // Manuelle Prüfung hier entfernt, um Redundanz zu vermeiden.
           }
+
+
+
+
+
+
+
+
+
+

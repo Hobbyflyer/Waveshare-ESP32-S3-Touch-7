@@ -1,39 +1,28 @@
-# Header-Anforderungen
+# Header Specifications
 
-## Übersicht
-Der Header ist eine persistente, durchgehende Leiste am oberen Rand des Displays (800x480 Pixel). Er ist über alle drei Bildschirmseiten (Main, Light, Settings) sichtbar und zeigt Statusinformationen wie WiFi-Signal an.
+## Overview
+A persistent top status bar visible across all pages.
+Implemented as part of the `top_layer` in `main.yaml`.
 
-## Layout
-- **Position**: Oben am Display mit 3px Abstand zu allen Seiten (links, oben, rechts).
-- **Höhe**: 30 Pixel.
-- **Y-Position**: 3px.
-- **Hintergrund**: Dunkles Anthrazit (0x2B2B2B), durchgehender Container.
-- **Border**: 1px, leicht heller als Hintergrund (0x404040).
-- **Breite**: 794px (800 - 6px Abstand).
-- **Elemente**: 
-  - Links: WiFi-Signal Label (x=10, align: LEFT_MID)
+## Layout (Frosted Glass Style)
+- **Container**: `obj`
+  - **Position**: x=10, y=10
+  - **Size**: 780x40 px
+  - **Style**: Dark blue (`0x2a3f5f`), 1px internal border (`0x5599dd`), radius 10.
+  - **Scrollable**: `false`
 
-## Funktionale Anforderungen
-- Header ist fixiert mit 3px Abstand zu den Seitenrändern (y=3).
-- Header ist nicht verschiebbar (`scrollable: false`).
-- **WiFi-Signal Label**: 
-  - Position: Links im Header-Container (x=10, LEFT_MID).
-  - Text: "WiFi: --" (wird über WiFi-Status aktualisiert).
-  - Textfarbe: Grau (0xAAAAAA) für bessere Sichtbarkeit.
-  - Schrift: montserrat_16.
+## Content
+1.  **WiFi Signal Label** (`wifi_signal_label`)
+    -   **Position**: Left (x=15, align: `LEFT_MID`)
+    -   **Text**: "WiFi: --" (Updated via lambda/interval)
+    -   **Color**: White (`0xf0f0f0`)
+2.  **Time Label** (`homeassistant_time_label`)
+    -   **Position**: Right (x=-15, align: `RIGHT_MID`)
+    -   **Text**: "--:--" (Updated via interval every 10s)
+    -   **Color**: Cyan (`0x1ba1d1`)
+    -   **Font**: `roboto_european_core`
 
-## Technische Implementierung
-- **Framework**: LVGL in ESPHome, als `top_layer` für Persistenz über Pages.
-- **Container**: obj-Widget mit Anthrazit-Hintergrund (0x2B2B2B).
-- **Positionierung**: Absolute Koordinaten (x=3, y=3, width=794, height=30).
-- **Fixierung**: `scrollable: false` für Container.
-- **Label**: WiFi-Signal wird im Container mit LEFT_MID Alignment platziert.
-
-## Abhängigkeiten
-- Integration mit WiFi-Komponente für Signal-Updates.
-- Kompatibel mit Touchscreen (GT911) und Display (MIPI RGB).
-
-## Testen
-- Kompilierung mit ESPHome.
-- Verifizierung der Fixierung (Header darf nicht verschiebbar sein).
-- WiFi-Status Updates prüfen.
+## Logic
+-   **Updates**:
+    -   WiFi signal strength is updated periodically.
+    -   Time is updated every 10 seconds via `interval` in `main.yaml`.
