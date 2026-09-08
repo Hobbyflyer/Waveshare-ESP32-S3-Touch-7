@@ -1,0 +1,41 @@
+# LVGL: Display-Framework mit Header, Footer und Pages
+# Persistente Elemente (Header/Footer) liegen als eigene Widget-Dateien daneben
+
+lvgl:
+
+  # Display Idle Timeout: Dimmen/Ausschalten nach Inaktivität
+  on_idle:
+    timeout: !lambda "return id(display_timeout).state * 1000;"
+    then:
+      - lambda: |-
+          // Nur wenn Display aktiv ist
+          if (id(display_active)) {
+            id(display_active) = false;
+            id(original_brightness) = id(lcdbacklight_brightness).current_values.get_brightness();
+
+            float dim_level = id(display_dim_level).state / 100.0;
+            if (dim_level == 0) {
+              // Ausschalten
+              auto call = id(lcdbacklight_brightness).turn_off();
+              call.perform();
+            } else {
+              // Dimmen
+              auto call = id(lcdbacklight_brightness).turn_on();
+              call.set_brightness(dim_level);
+              call.perform();
+            }
+          }
+
+  # Persistente Elemente: Header und Footer auf allen Seiten sichtbar
+  top_layer:
+    widgets:
+      - !include header.yaml
+      - !include footer_prev.yaml
+      - !include footer_center.yaml
+      - !include footer_next.yaml
+
+  # Pages
+  pages:
+    - !include ../pages/main_page.yaml
+    - !include ../pages/light_page.yaml
+    - !include ../pages/settings_page.yaml

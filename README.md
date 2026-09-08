@@ -24,9 +24,18 @@ waveshare-esp32-s3-touch-7/
 ├── entities/                         # Zentrale Entitäts-Definitionen
 │   ├── entities.yaml                # Master - aggregiert alle Entitäten
 │   ├── global_vars.yaml             # Globals, Numbers, Display-Logik
+│   ├── scripts.yaml                 # Scripts (UI-Sync, Seiten-Navigation)
 │   ├── thermostat.yaml              # Thermostat-Sensoren
 │   ├── weather.yaml                 # Wetter-Sensoren
 │   └── lights.yaml                  # Lichter + Binary-Sensoren
+│
+├── ui/                               # LVGL UI-Definition
+│   ├── lvgl.yaml                    # LVGL-Core (on_idle, top_layer, Pages)
+│   ├── header.yaml                  # Persistenter Header (WiFi-Status)
+│   ├── footer_prev.yaml             # Footer-Button "Vorherige Seite"
+│   ├── footer_center.yaml           # Footer Seitenname (mitte)
+│   ├── footer_next.yaml             # Footer-Button "Nächste Seite"
+│   └── resources.yaml               # Zeit, Fonts, Bilder, Uhrzeit-Update
 │
 ├── pages/                            # UI-Seiten (LVGL)
 │   ├── main_page.yaml               # Hauptseite (Thermostat & Wetter)

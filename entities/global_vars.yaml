@@ -109,7 +109,7 @@ interval:
                }
             }
             
-            // Timeout Logik wird nun über lvgl.on_idle in main.yaml handled
+            // Timeout Logik wird nun über lvgl.on_idle in ui/lvgl.yaml handled
             // Manuelle Prüfung hier entfernt, um Redundanz zu vermeiden.
           }
 

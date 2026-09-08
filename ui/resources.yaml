@@ -1,0 +1,38 @@
+# Ressourcen: Zeit, Fonts, Bilder und Uhrzeit-Aktualisierung
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+# Font resources
+font:
+  - file:
+      type: gfonts
+      family: Roboto
+    id: roboto_european_core
+    size: 24
+
+  # Größere Schrift für Uhrzeit-Anzeige (2 cm ≈ 75-80px Höhe)
+  - file:
+      type: gfonts
+      family: Roboto
+    id: roboto_european_core_96
+    size: 96
+
+image:
+  - file: images/main_bg.png
+    id: main_background
+    type: RGB565
+    resize: 800x480
+
+interval:
+  - interval: 1s
+    then:
+      # Uhrzeit auf Main Page aktualisieren
+      - lvgl.label.update:
+          id: main_page_time_display
+          text: !lambda |-
+            static char time_str[6];
+            auto time = id(homeassistant_time).now();
+            snprintf(time_str, sizeof(time_str), "%02d:%02d", time.hour, time.minute);
+            return time_str;

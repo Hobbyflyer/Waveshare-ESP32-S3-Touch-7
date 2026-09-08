@@ -1,0 +1,20 @@
+# Footer - Seitennamen Container (mitte)
+obj:
+  x: 100
+  y: 430
+  width: 600
+  height: 40
+  bg_opa: 80%
+  bg_color: 0x2a3f5f
+  border_width: 1
+  border_color: 0x5599dd
+  border_side: INTERNAL
+  radius: 20
+  scrollable: false
+  widgets:
+    - label:
+        id: page_name_label
+        align: CENTER
+        text_color: 0xf0f0f0
+        text: "Main"
+        text_font: roboto_european_core

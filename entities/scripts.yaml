@@ -1,0 +1,50 @@
+# Wiederverwendbare Scripts: UI-Synchronisation und Seiten-Navigation
+# Wird von main.yaml (Boot, API-Connect) und den Footer-Buttons genutzt
+
+script:
+  # Synchronisiert die Settings-Slider mit den aktuellen States
+  # (Backlight-Brightness + Display-Timeout)
+  - id: sync_ui_state
+    then:
+      - lambda: |-
+          // 1. Brightness Slider synchronisieren
+          // Die initial_brightness wurde bereits durch initial_state in der Hardware-Datei gesetzt
+          float current_brightness = id(lcdbacklight_brightness).current_values.get_brightness();
+          ESP_LOGD("sync", "Syncing Brightness Slider from Light: %f", current_brightness);
+
+          // Update global variable for restore logic
+          id(original_brightness) = current_brightness;
+
+          int slider_value = (int)(current_brightness * 255.0);
+
+          // Ensure slider is within bounds (10-255) to match initialization
+          if (slider_value < 10) slider_value = 10;
+          if (slider_value > 255) slider_value = 255;
+
+          if (id(settings_page_brightness_slider) != nullptr) {
+            lv_slider_set_value(id(settings_page_brightness_slider), slider_value, LV_ANIM_OFF);
+          }
+
+          // 2. Timeout Slider synchronisieren (von Flash oder HA Number)
+          if (id(display_timeout).state > 0) {
+            ESP_LOGD("sync", "Syncing Timeout Slider from Number: %f", id(display_timeout).state);
+            if (id(settings_page_timeout_slider) != nullptr) {
+              lv_slider_set_value(id(settings_page_timeout_slider), (int)id(display_timeout).state, LV_ANIM_OFF);
+            }
+            if (id(settings_page_timeout_value) != nullptr) {
+              lv_label_set_text_fmt(id(settings_page_timeout_value), "%d s", (int)id(display_timeout).state);
+            }
+          }
+
+  # Seitenwechsel: Index aktualisieren (+direction, mit Wrap-Around)
+  # und Seitennamen im Footer setzen
+  - id: change_page
+    parameters:
+      direction: int
+    then:
+      - lambda: |-
+          static const char* page_names[] = {"Main", "Light", "Settings"};
+          static const int page_count = sizeof(page_names) / sizeof(page_names[0]);
+
+          id(current_page_index) = (id(current_page_index) + direction + page_count) % page_count;
+          lv_label_set_text(id(page_name_label), page_names[id(current_page_index)]);

@@ -20,9 +20,12 @@ The navigation is cyclical (Main ↔ Light ↔ Settings ↔ Main).
   - Implemented in `on_gesture` of each page YAML.
   - Exceptions: Initial check in `light_page` prevents swipe when touching sliders.
 - **Footer Buttons**:
-  - Buttons in the footer (bottom layer) trigger the same page change logic via lambdas.
+  - Buttons in the footer (top layer) execute the shared `change_page` script
+    (`entities/scripts.yaml`) with `direction: -1` / `1`, which updates the index
+    and the page name label. The actual page switch is done by `lvgl.page.previous` / `lvgl.page.next`.
 - **Page Name Label**:
-  - Updates the central label in the footer with "Main", "Light", or "Settings" upon navigation.
+  - Updated centrally by the `change_page` script for footer navigation;
+    swipe gestures still update it via inline lambdas in each page YAML.
 
 ## Common Elements
 - **Header**: Top status bar (WiFi, Time).

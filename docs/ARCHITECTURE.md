@@ -28,7 +28,16 @@ waveshare-esp32-s3-touch-7/
 │   ├── thermostat.yaml              # Thermostat-Sensoren
 │   ├── weather.yaml                 # Wetter-Sensoren
 │   ├── lights.yaml                  # Lichter + Binary Sensoren
-│   └── global_vars.yaml             # Globale Variablen & Numbers
+│   ├── global_vars.yaml             # Globale Variablen & Numbers
+│   └── scripts.yaml                 # Scripts (UI-Sync, Seiten-Navigation)
+│
+├── ui/                               # ✅ LVGL UI-Definition
+│   ├── lvgl.yaml                    # LVGL-Core (on_idle, top_layer, Pages)
+│   ├── header.yaml                  # Persistenter Header (WiFi-Status)
+│   ├── footer_prev.yaml             # Footer-Button "Vorherige Seite"
+│   ├── footer_center.yaml           # Footer Seitenname (mitte)
+│   ├── footer_next.yaml             # Footer-Button "Nächste Seite"
+│   └── resources.yaml               # Zeit, Fonts, Bilder, Uhrzeit-Update
 │
 ├── pages/                            # ✅ UI-Seiten (LVGL)
 │   ├── main_page.yaml               # Hauptseite (Thermostat & Wetter)
@@ -57,8 +66,8 @@ waveshare-esp32-s3-touch-7/
 
 OBSOLET/GELÖSCHT:
   ❌ test.yaml → Ersetzt durch main.yaml
-  ❌ pages/header.yaml → Inline in main.yaml (top_layer)
-  ❌ pages/footer.yaml → Inline in main.yaml (top_layer)
+  ❌ pages/header.yaml → Nach ui/header.yaml verschoben (top_layer)
+  ❌ pages/footer.yaml → Nach ui/footer_*.yaml verschoben (top_layer)
 ```
 
 ---
@@ -68,13 +77,15 @@ OBSOLET/GELÖSCHT:
 ### 1. main.yaml (IMPLEMENTIERT) ✅
 
 **Verantwortung**: Zentrale Orchestrierung aller Komponenten  
-**Größe**: ~150 Zeilen
+**Größe**: ~35 Zeilen
 
 ```yaml
 packages:
   wifi: !include common/wifi.yaml
   hardware: !include waveshare/waveshare-esp32-s3-touch-lcd-7-bl.yaml
   entities: !include entities/entities.yaml
+  resources: !include ui/resources.yaml
+  ui: !include ui/lvgl.yaml
 
 esphome:
   name: "waveshare-test"
@@ -557,7 +568,7 @@ widgets:
 - ✅ `pages/main_page.yaml` - Hauptseite
 - ✅ `pages/light_page.yaml` - Lichtsteuerung
 - ✅ `pages/settings_page.yaml` - Einstellungen
-- ✅ Header und Footer inline in `main.yaml` (top_layer)
+- ✅ Header und Footer als eigene Widget-Dateien in `ui/` (top_layer)
 
 ### ✅ Phase 4: Main-Konsolidierung (ABGESCHLOSSEN)
 - ✅ `main.yaml` erstellt mit allen Packages

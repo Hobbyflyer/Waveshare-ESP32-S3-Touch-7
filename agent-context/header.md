@@ -2,7 +2,7 @@
 
 ## Overview
 A persistent top status bar visible across all pages.
-Implemented as part of the `top_layer` in `main.yaml`.
+Defined in `ui/header.yaml`, included in the `top_layer` of `ui/lvgl.yaml`.
 
 ## Layout (Frosted Glass Style)
 - **Container**: `obj`
@@ -14,15 +14,10 @@ Implemented as part of the `top_layer` in `main.yaml`.
 ## Content
 1.  **WiFi Signal Label** (`wifi_signal_label`)
     -   **Position**: Left (x=15, align: `LEFT_MID`)
-    -   **Text**: "WiFi: --" (Updated via lambda/interval)
+    -   **Text**: "WiFi: --" (Updated via WiFi component events)
     -   **Color**: White (`0xf0f0f0`)
-2.  **Time Label** (`homeassistant_time_label`)
-    -   **Position**: Right (x=-15, align: `RIGHT_MID`)
-    -   **Text**: "--:--" (Updated via interval every 10s)
-    -   **Color**: Cyan (`0x1ba1d1`)
-    -   **Font**: `roboto_european_core`
 
 ## Logic
--   **Updates**:
-    -   WiFi signal strength is updated periodically.
-    -   Time is updated every 10 seconds via `interval` in `main.yaml`.
+-   **WiFi updates**: Handled in `common/wifi.yaml` (updates `wifi_signal_label` on connect/signal change).
+-   **Time display**: Lives on the Main Page (`main_page_time_display`), not in the header.
+    Updated every 1s via `interval` in `ui/resources.yaml`.

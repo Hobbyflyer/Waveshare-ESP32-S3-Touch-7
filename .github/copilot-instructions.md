@@ -24,9 +24,18 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 ├── entities/                         # 🎯 ZENTRALE ENTITÄTS-DEFINITIONEN
 │   ├── entities.yaml               # Master-Aggregation (via packages)
 │   ├── global_vars.yaml            # Globals, Numbers, Display-Logik
+│   ├── scripts.yaml                # Scripts (UI-Sync, Seiten-Navigation)
 │   ├── thermostat.yaml             # Thermostat-Sensoren
 │   ├── weather.yaml                # Wetter-Sensoren
 │   └── lights.yaml                 # Lichter + Binary-Sensoren
+│
+├── ui/                               # 🖼️ LVGL UI-DEFINITION
+│   ├── lvgl.yaml                   # LVGL-Core (on_idle, top_layer, Pages)
+│   ├── header.yaml                 # Persistenter Header (WiFi-Status)
+│   ├── footer_prev.yaml            # Footer-Button "Vorherige Seite"
+│   ├── footer_center.yaml          # Footer Seitenname (mitte)
+│   ├── footer_next.yaml            # Footer-Button "Nächste Seite"
+│   └── resources.yaml              # Zeit, Fonts, Bilder, Uhrzeit-Update
 │
 ├── pages/                            # 🎨 UI-SEITEN (LVGL)
 │   ├── main_page.yaml              # Hauptseite (Thermostat & Wetter)
@@ -58,9 +67,10 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 ## Architektur-Prinzipien
 
 ### 1. **Separation of Concerns**
-- **entities/**: NUR Sensoren, Numbers, Globals (= Daten-Schicht)
-- **pages/**: NUR UI-Widgets, Layout (= Präsentations-Schicht)
-- **main.yaml**: Orchestrierung und globale Einstellungen (= Koordinations-Schicht)
+- **entities/**: NUR Sensoren, Numbers, Globals, Scripts (= Daten-Schicht)
+- **pages/**: NUR UI-Widgets, Layout der Seiten (= Präsentations-Schicht)
+- **ui/**: LVGL-Core, persistente Elemente (Header/Footer), Ressourcen
+- **main.yaml**: Orchestrierung (= Koordinations-Schicht)
 
 ### 2. **Wiederverwendbarkeit**
 - Sensoren in `entities/` sind auf allen Seiten verfügbar
@@ -89,9 +99,10 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 
 ### Neue Seite hinzufügen
 1. `pages/new_page.yaml` erstellen mit korrektem ID
-2. In `main.yaml` unter `lvgl.pages:` eintragen
-3. Navigation in Footer anpassen
-4. Kompilieren & testen
+2. In `ui/lvgl.yaml` unter `pages:` eintragen
+3. Seitenname im `page_names`-Array in `entities/scripts.yaml` ergänzen
+4. Swipe-Navigation (`on_gesture`) in den betroffenen `pages/*.yaml` anpassen
+5. Kompilieren & testen
 
 ### Sensoren von Home Assistant integrieren
 1. In entsprechende `entities/` Datei hinzufügen
@@ -118,6 +129,8 @@ packages:
   wifi: !include common/wifi.yaml
   hardware: !include waveshare/waveshare-esp32-s3-touch-lcd-7-bl.yaml
   entities: !include entities/entities.yaml  # ← Alle Entitäten
+  resources: !include ui/resources.yaml      # ← Zeit, Fonts, Bilder
+  ui: !include ui/lvgl.yaml                  # ← LVGL-Core (Header/Footer/Pages)
 ```
 
 ## Anweisungen für Copilot

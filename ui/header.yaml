@@ -1,0 +1,21 @@
+# Header - durchgehende Leiste am oberen Rand (Frosted Glass)
+# Zeigt WiFi-Signalstärke; sichtbar auf allen Seiten (top_layer)
+obj:
+  x: 10
+  y: 10
+  width: 780
+  height: 40
+  scrollable: false
+  bg_color: 0x2a3f5f
+  bg_opa: 80%
+  border_width: 1
+  border_color: 0x5599dd
+  border_side: INTERNAL
+  radius: 10
+  widgets:
+    - label:
+        id: wifi_signal_label
+        align: LEFT_MID
+        x: 15
+        text_color: 0xf0f0f0
+        text: "WiFi: --"

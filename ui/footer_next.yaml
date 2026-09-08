@@ -1,0 +1,25 @@
+# Footer Navigation - Nächster Screen (rechts)
+button:
+  id: nav_next_button
+  x: 710
+  y: 430
+  width: 80
+  height: 40
+  scrollable: false
+  bg_opa: 80%
+  bg_color: 0x2a3f5f
+  border_width: 1
+  border_color: 0x5599dd
+  border_side: INTERNAL
+  radius: 20
+  widgets:
+    - label:
+        align: CENTER
+        text: ">"
+        text_color: 0x1ba1d1
+        text_font: roboto_european_core
+  on_click:
+    - script.execute:
+        id: change_page
+        direction: 1
+    - lvgl.page.next:
