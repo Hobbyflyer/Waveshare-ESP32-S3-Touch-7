@@ -11,6 +11,38 @@ font:
       family: Roboto
     id: roboto_european_core
     size: 24
+    glyphs:
+      - " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+      - "äöüÄÖÜß°"
+
+  # Kleinere Schriften für kompakte Widget-Karten
+  - file:
+      type: gfonts
+      family: Roboto
+    id: roboto_european_core_20
+    size: 20
+    glyphs:
+      - " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+      - "äöüÄÖÜß°"
+
+  - file:
+      type: gfonts
+      family: Roboto
+    id: roboto_european_core_18
+    size: 18
+    glyphs:
+      - " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+      - "äöüÄÖÜß°"
+
+  # Große Schrift für Thermostat-Istwert (Mitte des Arc)
+  - file:
+      type: gfonts
+      family: Roboto
+    id: roboto_european_core_48
+    size: 48
+    glyphs:
+      - " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+      - "äöüÄÖÜß°"
 
   # Größere Schrift für Uhrzeit-Anzeige (2 cm ≈ 75-80px Höhe)
   - file:
@@ -19,8 +51,20 @@ font:
     id: roboto_european_core_96
     size: 96
 
+  # Material Design Icons – nur WiFi-Signalstärke-Glyphen (Header)
+  - file: fonts/materialdesignicons-webfont.ttf
+    id: mdi_wifi
+    size: 24
+    glyphs:
+      - "󰤟"  # wifi-strength-1
+      - "󰤢"  # wifi-strength-2
+      - "󰤥"  # wifi-strength-3
+      - "󰤨"  # wifi-strength-4 (voll)
+      - "󰤮"  # wifi-strength-off-outline
+
 image:
-  - file: images/main_bg.png
+  - platform: file
+    file: images/main_bg.png
     id: main_background
     type: RGB565
     resize: 800x480

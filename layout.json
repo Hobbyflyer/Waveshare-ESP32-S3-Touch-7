@@ -1,0 +1,57 @@
+{
+  "_comment": "Zentrale UI-Definition. Nach Aenderungen: python tools/generate_ui.py && esphome run main.yaml. Grid: [spalte, zeile, spaltenanzahl?, zeilenanzahl?]. Content-Bereich: y 70-420 (zwischen Header und Footer).",
+
+  "content": {"x": 30, "y": 70, "width": 740},
+  "grid": {"columns": 2, "row_height": 64, "gap": 8},
+
+  "pages": [
+    {
+      "id": "main",
+      "title": "Main",
+      "grid": {"columns": 4},
+      "widgets": [
+        {"type": "thermostat", "key": "thermostat", "entity": "climate.thermostat", "current_entity": "sensor.wohnzimmer_echo_dot_temperatur_2", "min": 15, "max": 25, "grid": [0, 0, 2, 5]},
+
+        {"type": "clock", "key": "time_display", "grid": [2, 0, 2, 2]},
+
+        {"type": "sensor-value", "entity": "sensor.weather_temperature", "key": "weather_temperature", "name": "Aussen", "format": "%.1f °C", "grid": [2, 2]},
+        {"type": "sensor-value", "entity": "sensor.weather_humidity", "key": "weather_humidity", "name": "Feuchte", "format": "%.0f %%", "grid": [3, 2]},
+        {"type": "sensor-value", "entity": "sensor.weather_condition", "key": "weather_condition", "name": "Wetter", "text": true, "grid": [2, 3]}
+
+      ]
+    },
+
+    {
+      "id": "light",
+      "title": "Light",
+      "widgets": [
+        {"type": "light", "entity": "light.licht_tv", "key": "tv", "name": "TV", "grid": [0, 0]},
+        {"type": "light", "entity": "light.wand_links", "key": "wand_links", "name": "Wand links", "grid": [1, 0]},
+        {"type": "light", "entity": "light.wand_mitte", "key": "wand_mitte", "name": "Wand Mitte", "grid": [0, 1]},
+        {"type": "light", "entity": "light.wand_rechts", "key": "wand_rechts", "name": "Wand rechts", "grid": [1, 1]},
+        {"type": "light", "entity": "light.licht_tuer", "key": "tuer", "name": "Tür", "grid": [0, 2]},
+        {"type": "light", "entity": "light.licht_schrank_mitte", "key": "schrank_mitte", "name": "Schrank", "grid": [1, 2]},
+        {"type": "light", "entity": "light.licht_esstisch", "key": "esstisch", "name": "Esstisch", "grid": [0, 3]}
+      ]
+    },
+
+    {
+      "id": "rolladen",
+      "title": "Rolladen",
+      "widgets": [
+        {"type": "cover", "entity": "cover.rolladen_1", "key": "rolladen_1", "name": "Rolladen 1", "grid": [0, 0]},
+        {"type": "cover", "entity": "cover.rolladen_2", "key": "rolladen_2", "name": "Rolladen 2", "grid": [1, 0]}
+      ]
+    },
+
+    {
+      "id": "settings",
+      "title": "Settings",
+      "grid": {"columns": 1},
+      "widgets": [
+        {"type": "backlight-slider", "key": "brightness", "name": "Display-Helligkeit", "grid": [0, 0]},
+        {"type": "number-slider", "key": "timeout", "name": "Display-Timeout", "bind": "display_timeout", "unit": "s", "min": 10, "max": 180, "grid": [0, 1]}
+      ]
+    }
+  ]
+}

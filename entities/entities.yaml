@@ -4,6 +4,5 @@
 packages:
   global_vars: !include global_vars.yaml
   scripts: !include scripts.yaml
-  thermostat: !include thermostat.yaml
-  weather: !include weather.yaml
-  lights: !include lights.yaml
+  navigation: !include generated_navigation.yaml   # GENERIERT aus layout.json
+  generated_entities: !include generated_entities.yaml  # GENERIERT aus layout.json

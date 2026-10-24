@@ -18,16 +18,21 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 ## Projektstruktur (AKTUELL)
 
 ```
-├── main.yaml                         # ✅ ZENTRALE ORCHESTRIERUNG
-├── ARCHITECTURE.md                   # Detaillierte Architektur-Dokumentation
+├── main.yaml                         # ✅ ZENTRALE ORCHESTRIERUNG (inkl. api + ota)
+├── layout.json                       # 🎯 UI-DEFINITION (Seiten, Widgets, Entitäten, Grid)
+├── tools/generate_ui.py              # Generator: layout.json -> pages/ + entities/generated_*
+├── widgets/*.tpl                     # Widget-Templates (string.Template)
+│
+├── docs/
+│   ├── ARCHITECTURE.md               # Detaillierte Architektur-Dokumentation
+│   └── design.md                     # Design-Richtlinien
 │
 ├── entities/                         # 🎯 ZENTRALE ENTITÄTS-DEFINITIONEN
 │   ├── entities.yaml               # Master-Aggregation (via packages)
 │   ├── global_vars.yaml            # Globals, Numbers, Display-Logik
-│   ├── scripts.yaml                # Scripts (UI-Sync, Seiten-Navigation)
-│   ├── thermostat.yaml             # Thermostat-Sensoren
-│   ├── weather.yaml                # Wetter-Sensoren
-│   └── lights.yaml                 # Lichter + Binary-Sensoren
+│   ├── scripts.yaml                # Scripts (UI-Sync)
+│   ├── generated_entities.yaml     # ⚙️ GENERIERT: HA-Sensoren + Widget-Sync
+│   └── generated_navigation.yaml   # ⚙️ GENERIERT: change_page-Script
 │
 ├── ui/                               # 🖼️ LVGL UI-DEFINITION
 │   ├── lvgl.yaml                   # LVGL-Core (on_idle, top_layer, Pages)
@@ -37,9 +42,9 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 │   ├── footer_next.yaml            # Footer-Button "Nächste Seite"
 │   └── resources.yaml              # Zeit, Fonts, Bilder, Uhrzeit-Update
 │
-├── pages/                            # 🎨 UI-SEITEN (LVGL)
-│   ├── main_page.yaml              # Hauptseite (Thermostat & Wetter)
-│   ├── light_page.yaml             # Lichtsteuerung
+├── pages/                            # 🎨 UI-SEITEN (LVGL) - ⚙️ GENERIERT, nicht manuell editieren!
+│   ├── main_page.yaml              # Hauptseite (Uhr, Wetter, Thermostat)
+│   ├── light_page.yaml             # Lichtsteuerung (Licht-Karten)
 │   └── settings_page.yaml          # Einstellungen (Display-Brightness)
 │
 ├── agent-context/                    # 📋 ANFORDERUNGEN
@@ -53,15 +58,17 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 │
 ├── common/                           # ⚙️ GEMEINSAME KONFIGURATION
 │   ├── secrets.yaml                # Vertrauliche Daten (gitignore)
-│   └── wifi.yaml                   # WiFi-Konfiguration
+│   ├── wifi.yaml                   # WiFi + Captive Portal
+│   ├── ble.yaml                    # BLE Tracker + Bluetooth Proxy
+│   └── diagnostics.yaml            # Logger, WiFi-RSSI, Uptime, IP
 │
 ├── waveshare/                        # 🔧 HARDWARE-SPEZIFISCH
-│   ├── waveshare-esp32-s3-touch-lcd-7.yaml
-│   └── waveshare-esp32-s3-touch-lcd-7-bl.yaml
+│   ├── waveshare-esp32-s3-touch-lcd-7.yaml      # Basis (Display, Touch, PSRAM)
+│   └── waveshare-esp32-s3-touch-lcd-7-bl.yaml   # Wrapper: Basis + Backlight
 │
 ├── fonts/                            # 🔤 Benutzerdefinierte Schriftarten
 ├── images/                           # 🖼️ Bilder (RGB565)
-└── templates/                        # 📦 Wiederverwendbare Templates (für Zukunft)
+└── templates/                        # 📦 Wiederverwendbare ESPHome-Templates (für Zukunft, .gitkeep)
 ```
 
 ## Architektur-Prinzipien
@@ -93,21 +100,27 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 ## Häufige Aufgaben
 
 ### Neue Lichter hinzufügen
-1. Sensor in `entities/lights.yaml` hinzufügen (binary_sensor + sensor)
-2. Widget in `pages/light_page.yaml` referenzieren
+1. Eintrag in `layout.json` auf der Light-Seite ergänzen:
+   `{"type": "light", "entity": "light.licht_x", "key": "x", "name": "Anzeigename", "grid": [col, row]}`
+2. `python tools/generate_ui.py` ausführen
 3. Kompilieren & testen
 
+Der Generator erzeugt dabei automatisch Widget-Karte + HA-Sync (State → Toggle, Brightness → Slider).
+
 ### Neue Seite hinzufügen
-1. `pages/new_page.yaml` erstellen mit korrektem ID
-2. In `ui/lvgl.yaml` unter `pages:` eintragen
-3. Seitenname im `page_names`-Array in `entities/scripts.yaml` ergänzen
-4. Swipe-Navigation (`on_gesture`) in den betroffenen `pages/*.yaml` anpassen
-5. Kompilieren & testen
+1. Seiten-Objekt in `layout.json` ergänzen (id, title, widgets)
+2. `python tools/generate_ui.py` ausführen (erzeugt Seite + aktualisiert `change_page`-Seitenliste)
+3. In `ui/lvgl.yaml` unter `pages:` eintragen: `- !include ../pages/<id>_page.yaml`
+4. Kompilieren & testen
 
 ### Sensoren von Home Assistant integrieren
-1. In entsprechende `entities/` Datei hinzufügen
-2. ID für Lambda-Zugriff definieren
-3. In Pages via Lambda oder on_value referenzieren
+1. `sensor-value`-Widget in `layout.json` ergänzen (entity, key, name, format)
+2. Generator ausführen — die HA-Anbindung inkl. Label-Update wird automatisch erzeugt
+
+### UI-Workflow (immer!)
+1. `layout.json` bearbeiten (NIEMALS `pages/*.yaml` oder `entities/generated_*.yaml` direkt)
+2. `python tools/generate_ui.py`
+3. `esphome config main.yaml` zum Validieren
 
 ## Wichtige Konventionen
 
@@ -127,6 +140,8 @@ Das Projekt folgt einer **sauberen, modularen Architektur** mit Separation von E
 ```yaml
 packages:
   wifi: !include common/wifi.yaml
+  ble: !include common/ble.yaml
+  diagnostics: !include common/diagnostics.yaml
   hardware: !include waveshare/waveshare-esp32-s3-touch-lcd-7-bl.yaml
   entities: !include entities/entities.yaml  # ← Alle Entitäten
   resources: !include ui/resources.yaml      # ← Zeit, Fonts, Bilder
@@ -138,6 +153,7 @@ packages:
 ### ✅ DO's
 - ✅ Verwende absolute Pfade bei Dateioperationen
 - ✅ Teste Änderungen durch `esphome compile main.yaml`
+- ✅ UI-Änderungen IMMER über `layout.json` + `python tools/generate_ui.py`
 - ✅ Halte zentrale Definitionen in `entities/` (nicht in Pages!)
 - ✅ Achte auf korrekte YAML-Einrückung (2 Leerzeichen)
 - ✅ Dokumentiere Änderungen in YAML-Kommentaren
@@ -146,6 +162,7 @@ packages:
 - ✅ Teste Page-Navigation (Swipe, Footer-Buttons)
 
 ### ❌ DON'Ts
+- ❌ Generierte Dateien manuell editieren (`pages/*.yaml`, `entities/generated_*.yaml`)
 - ❌ Duplikate von Sensoren in mehreren Dateien
 - ❌ Hardcoded Entity-IDs in Lambdas (zentral definiert?)
 - ❌ Komplexe Logik in Pages (gehört in global_vars.yaml)
@@ -194,5 +211,5 @@ git push
 - **ESPHome Docs**: https://esphome.io/
 - **LVGL Cookbook**: https://esphome.io/cookbook/lvgl/
 - **Home Assistant Docs**: https://www.home-assistant.io/
-- **Projektdokumentation**: Siehe ARCHITECTURE.md und design.md
+- **Projektdokumentation**: Siehe `docs/ARCHITECTURE.md` und `docs/design.md`
 - Bei Fragen: Siehe `agent-context/` für detaillierte Spezifikationen

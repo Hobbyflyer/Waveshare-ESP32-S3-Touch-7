@@ -38,4 +38,5 @@ lvgl:
   pages:
     - !include ../pages/main_page.yaml
     - !include ../pages/light_page.yaml
+    - !include ../pages/rolladen_page.yaml
     - !include ../pages/settings_page.yaml

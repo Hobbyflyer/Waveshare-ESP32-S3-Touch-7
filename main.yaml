@@ -3,6 +3,8 @@
 
 packages:
   wifi: !include common/wifi.yaml
+  ble: !include common/ble.yaml
+  diagnostics: !include common/diagnostics.yaml
   hardware: !include waveshare/waveshare-esp32-s3-touch-lcd-7-bl.yaml
   entities: !include entities/entities.yaml
   resources: !include ui/resources.yaml
@@ -15,9 +17,37 @@ packages:
 api:
   id: homeassistant_api
   reboot_timeout: 0s  # Kein automatischer Reboot bei API-Verbindungsverlust
+  # encryption:
+  #   key: !secret api_key
+
+  # Sobald HA die Verbindung verliert, wird das WiFi-Label inaktiv (grau)
+  on_client_disconnected:
+    if:
+      condition:
+        not:
+          api.connected:
+      then:
+        - esp32_ble_tracker.stop_scan:
+        - lvgl.label.update:
+            id: wifi_signal_label
+            text_color: 0x555555  # Grau/inaktiv
+        - lvgl.label.update:
+            id: wifi_signal_label
+            text: "\xF3\xB0\xA4\xAE"  # wifi-strength-off-outline
+
   on_client_connected:
     # UI-State (Brightness/Timeout Slider) nach (Re-)Connect synchronisieren
     - script.execute: sync_ui_state
+    # WiFi-Label wieder aktiv schalten
+    - lvgl.label.update:
+        id: wifi_signal_label
+        text_color: 0xAAAAAA  # Normal/aktiv
+    # BLE-Scan (Bluetooth Proxy) starten
+    - esp32_ble_tracker.start_scan:
+        continuous: true
+
+ota:
+  platform: esphome
 
 esphome:
   name: "waveshare-test"

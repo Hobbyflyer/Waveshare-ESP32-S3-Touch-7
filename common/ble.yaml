@@ -1,0 +1,18 @@
+# BLE Tracker + Bluetooth Proxy (z.B. für Bermuda BLE in Home Assistant)
+# Der Scan wird über die API-Automations in main.yaml gesteuert
+# (start bei api-Verbindung, stop bei Verbindungsverlust)
+
+esp32_ble_tracker:
+  scan_parameters:
+    # Kein Auto-Start: Scan wird im `api`-Block (main.yaml) gesteuert
+    continuous: False
+
+    active: True  # Scan-Requests senden, um mehr Infos zu sammeln (z.B. Gerätename)
+
+    interval: 320ms  # Default 320ms - Dauer pro Advert-Channel
+    window:   50ms   # Default 30ms - wie lange pro Intervall tatsächlich gehört wird.
+    # Falls das Gerät instabil wird oder nicht hinterherkommt, "window" reduzieren.
+    # Relevant, wenn das Gerät zusätzlich Sensoren bedient oder PWM für Lights macht.
+
+bluetooth_proxy:
+  active: true  # Erlaubt ausgehende Verbindungen von HA zu Geräten

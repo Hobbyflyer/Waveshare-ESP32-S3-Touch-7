@@ -1,0 +1,31 @@
+# ${name} (${entity})
+- obj:
+    id: ${page}_page_${key}_panel
+    x: ${x}
+    y: ${y}
+    width: ${w}
+    height: ${h}
+    scrollable: false
+    bg_color: 0x101f33
+    bg_opa: 80%
+    border_width: 1
+    border_color: 0x213955
+    border_side: INTERNAL
+    radius: 12
+- label:
+    id: ${page}_page_${key}_label
+    x: ${label_x}
+    y: ${label_y}
+    text: "${name}"
+    text_font: roboto_european_core_18
+    text_color: 0x8297ad
+- label:
+    id: ${page}_page_${key}_value
+    x: ${label_x}
+    y: ${value_y}
+    width: ${w}
+    height: 30
+    text: "--"
+    text_align: LEFT
+    text_font: roboto_european_core
+    text_color: 0xf4f8fc

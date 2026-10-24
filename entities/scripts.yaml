@@ -1,5 +1,7 @@
-# Wiederverwendbare Scripts: UI-Synchronisation und Seiten-Navigation
-# Wird von main.yaml (Boot, API-Connect) und den Footer-Buttons genutzt
+# Wiederverwendbare Scripts: UI-Synchronisation
+# Wird von main.yaml (Boot, API-Connect) genutzt
+# HINWEIS: Das change_page-Script (Seiten-Navigation) wird aus layout.json
+# generiert -> entities/generated_navigation.yaml
 
 script:
   # Synchronisiert die Settings-Slider mit den aktuellen States
@@ -35,16 +37,3 @@ script:
               lv_label_set_text_fmt(id(settings_page_timeout_value), "%d s", (int)id(display_timeout).state);
             }
           }
-
-  # Seitenwechsel: Index aktualisieren (+direction, mit Wrap-Around)
-  # und Seitennamen im Footer setzen
-  - id: change_page
-    parameters:
-      direction: int
-    then:
-      - lambda: |-
-          static const char* page_names[] = {"Main", "Light", "Settings"};
-          static const int page_count = sizeof(page_names) / sizeof(page_names[0]);
-
-          id(current_page_index) = (id(current_page_index) + direction + page_count) % page_count;
-          lv_label_set_text(id(page_name_label), page_names[id(current_page_index)]);

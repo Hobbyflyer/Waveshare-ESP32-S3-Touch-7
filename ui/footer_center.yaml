@@ -1,20 +1,20 @@
-# Footer - Seitennamen Container (mitte)
+# Footer - kompakte Navigationskapsel mit aktivem Seitennamen
 obj:
-  x: 100
-  y: 430
-  width: 600
-  height: 40
-  bg_opa: 80%
-  bg_color: 0x2a3f5f
+  x: 294
+  y: 432
+  width: 212
+  height: 36
+  bg_opa: 100%
+  bg_color: 0x101f33
   border_width: 1
-  border_color: 0x5599dd
+  border_color: 0x213955
   border_side: INTERNAL
-  radius: 20
+  radius: 18
   scrollable: false
   widgets:
     - label:
         id: page_name_label
         align: CENTER
-        text_color: 0xf0f0f0
+        text_color: 0xf4f8fc
         text: "Main"
-        text_font: roboto_european_core
+        text_font: roboto_european_core_20

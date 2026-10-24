@@ -14,9 +14,6 @@ output:
     zero_means_zero: true
 
 light:
-  - id: !extend lcdbacklight
-    internal: true
-    name: !remove
   - platform: monochromatic
     output: backlight_brightness_output
     id: lcdbacklight_brightness

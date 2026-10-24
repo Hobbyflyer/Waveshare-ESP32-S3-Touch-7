@@ -1,23 +1,23 @@
 # Footer Navigation - Vorheriger Screen (links)
 button:
   id: nav_prev_button
-  x: 10
-  y: 430
-  width: 80
-  height: 40
+  x: 220
+  y: 432
+  width: 64
+  height: 36
   scrollable: false
-  bg_color: 0x2a3f5f
-  bg_opa: 80%
+  bg_color: 0x101f33
+  bg_opa: 100%
   border_width: 1
-  border_color: 0x5599dd
+  border_color: 0x213955
   border_side: INTERNAL
-  radius: 20
+  radius: 18
   widgets:
     - label:
         align: CENTER
         text: "<"
         text_font: roboto_european_core
-        text_color: 0x1ba1d1
+        text_color: 0x20b8e6
   on_click:
     - script.execute:
         id: change_page

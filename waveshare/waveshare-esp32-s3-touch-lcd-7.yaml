@@ -55,27 +55,9 @@ i2c:
 ch422g:
   - id: ch422g_hub
 
-output:
-  - platform: gpio
-    id: lcdbacklight_output
-    pin:
-      ch422g: ch422g_hub
-      number: 2
-      mode:
-        output: true
-      inverted: false
-  
-light:
-  - platform: binary
-    output: lcdbacklight_output
-    id: lcdbacklight
-    name: LCD Backlight
-    icon: mdi:wall-sconce-flat-outline
-    disabled_by_default: true
-    restore_mode: ALWAYS_ON
-
-
 ### Display
+# CH422G Pin 2 (und Pin 6) wird seit neueren ESPHome-Versionen vom
+# Displaymodell ueber enable_pin aktiviert. Kein zweites GPIO-Output definieren.
 display:
   - platform: mipi_rgb
     model: ESP32-S3-TOUCH-LCD-7-800X480

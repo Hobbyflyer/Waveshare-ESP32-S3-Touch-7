@@ -18,18 +18,24 @@ Das Projekt wird in folgende logische Einheiten aufgeteilt:
 
 ```
 waveshare-esp32-s3-touch-7/
-├── main.yaml                         # ✅ ZENTRALE KONFIGURATION - orchestriert alles
+├── main.yaml                         # ✅ ZENTRALE KONFIGURATION - orchestriert alles (inkl. api + ota)
+├── layout.json                       # ✅ UI-DEFINITION: Seiten, Widgets, Entitäten (Single Source)
 ├── README.md
-├── design.md
-├── ARCHITECTURE.md                   # Diese Datei
+│
+├── tools/
+│   └── generate_ui.py               # ✅ Generator: layout.json -> pages/*.yaml + entities/generated_*
+├── widgets/                          # ✅ Widget-Templates (light_card, toggle_card, sensor_value, ...)
+│
+├── docs/
+│   ├── ARCHITECTURE.md               # Diese Datei
+│   └── design.md                     # Design-Richtlinien
 │
 ├── entities/                         # ✅ Zentrale Entitäts-Definitionen
 │   ├── entities.yaml                # Master-Datei für alle Entitäten (aggregiert via packages)
-│   ├── thermostat.yaml              # Thermostat-Sensoren
-│   ├── weather.yaml                 # Wetter-Sensoren
-│   ├── lights.yaml                  # Lichter + Binary Sensoren
 │   ├── global_vars.yaml             # Globale Variablen & Numbers
-│   └── scripts.yaml                 # Scripts (UI-Sync, Seiten-Navigation)
+│   ├── scripts.yaml                 # Scripts (UI-Sync)
+│   ├── generated_entities.yaml      # ⚙️ GENERIERT: HA-Sensoren + Widget-Sync (aus layout.json)
+│   └── generated_navigation.yaml    # ⚙️ GENERIERT: change_page-Script (Seitenliste aus layout.json)
 │
 ├── ui/                               # ✅ LVGL UI-Definition
 │   ├── lvgl.yaml                    # LVGL-Core (on_idle, top_layer, Pages)
@@ -39,26 +45,31 @@ waveshare-esp32-s3-touch-7/
 │   ├── footer_next.yaml             # Footer-Button "Nächste Seite"
 │   └── resources.yaml               # Zeit, Fonts, Bilder, Uhrzeit-Update
 │
-├── pages/                            # ✅ UI-Seiten (LVGL)
-│   ├── main_page.yaml               # Hauptseite (Thermostat & Wetter)
-│   ├── light_page.yaml              # Lichtsteuerung
+├── pages/                            # ✅ UI-Seiten (LVGL) - ⚙️ GENERIERT aus layout.json
+│   ├── main_page.yaml               # Hauptseite (Uhr, Wetter, Thermostat)
+│   ├── light_page.yaml              # Lichtsteuerung (Licht-Karten)
 │   └── settings_page.yaml           # Einstellungen
 │
-├── templates/                        # Wiederverwendbare Templates (für Zukunft)
-│   └── (leer - für zukünftige Templates)
+├── templates/                        # Wiederverwendbare ESPHome-Templates (für Zukunft, .gitkeep)
 │
 ├── agent-context/
 │   ├── footer.md                    # Footer-Anforderungen
 │   ├── header.md                    # Header-Anforderungen
+│   ├── page-structure.md            # Seitenstruktur & Navigation
+│   ├── main-page.md                 # Hauptseite-Anforderungen
+│   ├── light-page.md                # Lichtseite-Anforderungen
+│   ├── settings-page.md             # Einstellungsseite-Anforderungen
 │   └── display-timeout.md           # Display-Timeout-Konfiguration
 │
 ├── common/
 │   ├── secrets.yaml                 # WiFi, API-Keys (gitignore)
-│   └── wifi.yaml                    # WiFi-Konfiguration
+│   ├── wifi.yaml                    # WiFi + Captive Portal
+│   ├── ble.yaml                     # BLE Tracker + Bluetooth Proxy
+│   └── diagnostics.yaml             # Logger, WiFi-RSSI, Uptime, IP
 │
 ├── waveshare/
-│   ├── waveshare-esp32-s3-touch-lcd-7-bl.yaml
-│   └── waveshare-esp32-s3-touch-lcd-7.yaml
+│   ├── waveshare-esp32-s3-touch-lcd-7.yaml      # Basis: Display, Touch, PSRAM
+│   └── waveshare-esp32-s3-touch-lcd-7-bl.yaml   # Wrapper: Basis + Backlight (wird in main.yaml eingebunden)
 │
 ├── fonts/                            # TTF/OTF Schriftarten
 ├── images/                           # Bilder (RGB565)
@@ -68,6 +79,11 @@ OBSOLET/GELÖSCHT:
   ❌ test.yaml → Ersetzt durch main.yaml
   ❌ pages/header.yaml → Nach ui/header.yaml verschoben (top_layer)
   ❌ pages/footer.yaml → Nach ui/footer_*.yaml verschoben (top_layer)
+  ❌ common/wifi.yaml als Sammelbecken → Aufgeteilt in wifi.yaml, ble.yaml, diagnostics.yaml;
+     api + ota nach main.yaml konsolidiert (Oktober 2026)
+  ❌ entities/lights.yaml, weather.yaml, thermostat.yaml → Ersetzt durch
+     entities/generated_entities.yaml (generiert aus layout.json, Oktober 2026)
+  ❌ Handschriftliche pages/*.yaml → Werden aus layout.json generiert (Oktober 2026)
 ```
 
 ---
@@ -82,31 +98,40 @@ OBSOLET/GELÖSCHT:
 ```yaml
 packages:
   wifi: !include common/wifi.yaml
+  ble: !include common/ble.yaml
+  diagnostics: !include common/diagnostics.yaml
   hardware: !include waveshare/waveshare-esp32-s3-touch-lcd-7-bl.yaml
   entities: !include entities/entities.yaml
   resources: !include ui/resources.yaml
   ui: !include ui/lvgl.yaml
 
+api:
+  id: homeassistant_api
+  reboot_timeout: 0s
+  on_client_connected: ...     # UI-Sync + WiFi-Label aktiv + BLE-Scan start
+  on_client_disconnected: ...  # WiFi-Label inaktiv + BLE-Scan stop
+
+ota:
+  platform: esphome
+
 esphome:
   name: "waveshare-test"
   friendly_name: "Display_1"
+  on_boot: ...  # sync_ui_state
 
-time:
-  - platform: homeassistant
-
-# Globale LVGL-Konfiguration mit inline Header/Footer
+# LVGL-Konfiguration (ui/lvgl.yaml) mit Header/Footer im top_layer
 lvgl:
   on_idle: ...  # Display Timeout-Logik
   top_layer:
     widgets:
-      - obj: ...  # Header (WiFi-Label)
-      - button: ... # Footer-Navigation (Prev)
-      - obj: ...  # Footer-Center (Page-Name)
-      - button: ... # Footer-Navigation (Next)
+      - !include header.yaml          # WiFi-Label
+      - !include footer_prev.yaml     # Navigation (Prev)
+      - !include footer_center.yaml   # Page-Name
+      - !include footer_next.yaml     # Navigation (Next)
   pages:
-    - !include pages/main_page.yaml
-    - !include pages/light_page.yaml
-    - !include pages/settings_page.yaml
+    - !include ../pages/main_page.yaml
+    - !include ../pages/light_page.yaml
+    - !include ../pages/settings_page.yaml
 ```
 
 ---

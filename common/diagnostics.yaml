@@ -1,0 +1,35 @@
+# Diagnose: Logger + Sensoren (WiFi-RSSI mit Header-Icon, Uptime, IP-Adresse)
+
+# Aktiviert den Logger, damit wir sehen, was passiert
+logger:
+  baud_rate: 115200
+
+sensor:
+  # WiFi Signal Strength (RSSI) -> steuert das WiFi-Icon im Header
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    id: wifi_rssi
+    entity_category: diagnostic
+    disabled_by_default: true
+    update_interval: 20s
+    on_value:
+      then:
+        # WiFi-Symbol je nach Signalstärke (MDI wifi-strength-1..4, UTF-8 kodiert)
+        - lvgl.label.update:
+            id: wifi_signal_label
+            text: !lambda |-
+              if (x >= -55) return "\xF3\xB0\xA4\xA8";       // wifi-strength-4 (voll)
+              else if (x >= -65) return "\xF3\xB0\xA4\xA5";  // wifi-strength-3
+              else if (x >= -75) return "\xF3\xB0\xA4\xA2";  // wifi-strength-2
+              else return "\xF3\xB0\xA4\x9F";                // wifi-strength-1 (schwach)
+
+  - platform: uptime
+    # Der Uptime-Sensor zeigt, ob das Gerät ungewollt rebootet.
+    name: "Uptime Sensor"
+    entity_category: diagnostic
+    update_interval: 60s
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      id: ip_addr
