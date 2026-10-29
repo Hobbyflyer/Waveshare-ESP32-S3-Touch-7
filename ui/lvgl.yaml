@@ -31,7 +31,6 @@ lvgl:
     widgets:
       - !include header.yaml
       - !include footer_prev.yaml
-      - !include footer_center.yaml
       - !include footer_next.yaml
 
   # Pages

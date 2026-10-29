@@ -40,9 +40,9 @@ widgets:
       bg_opa: 100%
       border_width: 0
       radius: 0
-  # Rolladen 1 (cover.rolladen_1) - Rolladen: Auf/Stop/Zu + Positionsanzeige
+  # West (cover.rollladen_wz_rechts) - Rolladen: Auf/Stop/Zu + Positionsanzeige
   - obj:
-      id: rolladen_page_rolladen_1_panel
+      id: rolladen_page_west_panel
       x: 30
       y: 70
       width: 366
@@ -55,14 +55,14 @@ widgets:
       border_side: INTERNAL
       radius: 12
   - label:
-      id: rolladen_page_rolladen_1_label
+      id: rolladen_page_west_label
       x: 42
       y: 76
-      text: "Rolladen 1"
+      text: "West"
       text_font: roboto_european_core_18
       text_color: 0xf4f8fc
   - label:
-      id: rolladen_page_rolladen_1_position_value
+      id: rolladen_page_west_position_value
       x: 314
       y: 76
       width: 70
@@ -72,7 +72,7 @@ widgets:
       text_font: roboto_european_core_18
       text_color: 0x20b8e6
   - button:
-      id: rolladen_page_rolladen_1_up
+      id: rolladen_page_west_up
       x: 40
       y: 102
       width: 108
@@ -94,9 +94,9 @@ widgets:
           - homeassistant.service:
               service: cover.open_cover
               data:
-                entity_id: cover.rolladen_1
+                entity_id: cover.rollladen_wz_rechts
   - button:
-      id: rolladen_page_rolladen_1_stop
+      id: rolladen_page_west_stop
       x: 158
       y: 102
       width: 108
@@ -118,9 +118,9 @@ widgets:
           - homeassistant.service:
               service: cover.stop_cover
               data:
-                entity_id: cover.rolladen_1
+                entity_id: cover.rollladen_wz_rechts
   - button:
-      id: rolladen_page_rolladen_1_down
+      id: rolladen_page_west_down
       x: 276
       y: 102
       width: 108
@@ -142,10 +142,216 @@ widgets:
           - homeassistant.service:
               service: cover.close_cover
               data:
-                entity_id: cover.rolladen_1
-  # Rolladen 2 (cover.rolladen_2) - Rolladen: Auf/Stop/Zu + Positionsanzeige
+                entity_id: cover.rollladen_wz_rechts
+  # Terrasse (cover.rollladen_wz_links) - Rolladen: Auf/Stop/Zu + Positionsanzeige
   - obj:
-      id: rolladen_page_rolladen_2_panel
+      id: rolladen_page_terrasse_panel
+      x: 30
+      y: 142
+      width: 366
+      height: 64
+      scrollable: false
+      bg_color: 0x101f33
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 12
+  - label:
+      id: rolladen_page_terrasse_label
+      x: 42
+      y: 148
+      text: "Terrasse"
+      text_font: roboto_european_core_18
+      text_color: 0xf4f8fc
+  - label:
+      id: rolladen_page_terrasse_position_value
+      x: 314
+      y: 148
+      width: 70
+      height: 24
+      text: "-- %"
+      text_align: RIGHT
+      text_font: roboto_european_core_18
+      text_color: 0x20b8e6
+  - button:
+      id: rolladen_page_terrasse_up
+      x: 40
+      y: 174
+      width: 108
+      height: 26
+      bg_color: 0x0b1828
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 8
+      widgets:
+        - label:
+            align: CENTER
+            text: "Auf"
+            text_font: roboto_european_core_18
+            text_color: 0x20b8e6
+      on_click:
+        then:
+          - homeassistant.service:
+              service: cover.open_cover
+              data:
+                entity_id: cover.rollladen_wz_links
+  - button:
+      id: rolladen_page_terrasse_stop
+      x: 158
+      y: 174
+      width: 108
+      height: 26
+      bg_color: 0x0b1828
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 8
+      widgets:
+        - label:
+            align: CENTER
+            text: "Stop"
+            text_font: roboto_european_core_18
+            text_color: 0xf4f8fc
+      on_click:
+        then:
+          - homeassistant.service:
+              service: cover.stop_cover
+              data:
+                entity_id: cover.rollladen_wz_links
+  - button:
+      id: rolladen_page_terrasse_down
+      x: 276
+      y: 174
+      width: 108
+      height: 26
+      bg_color: 0x0b1828
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 8
+      widgets:
+        - label:
+            align: CENTER
+            text: "Zu"
+            text_font: roboto_european_core_18
+            text_color: 0x20b8e6
+      on_click:
+        then:
+          - homeassistant.service:
+              service: cover.close_cover
+              data:
+                entity_id: cover.rollladen_wz_links
+  # Schiebetür (cover.rollladen_wz_schiebetur) - Rolladen: Auf/Stop/Zu + Positionsanzeige
+  - obj:
+      id: rolladen_page_schiebetuer_panel
+      x: 404
+      y: 142
+      width: 366
+      height: 64
+      scrollable: false
+      bg_color: 0x101f33
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 12
+  - label:
+      id: rolladen_page_schiebetuer_label
+      x: 416
+      y: 148
+      text: "Schiebetür"
+      text_font: roboto_european_core_18
+      text_color: 0xf4f8fc
+  - label:
+      id: rolladen_page_schiebetuer_position_value
+      x: 688
+      y: 148
+      width: 70
+      height: 24
+      text: "-- %"
+      text_align: RIGHT
+      text_font: roboto_european_core_18
+      text_color: 0x20b8e6
+  - button:
+      id: rolladen_page_schiebetuer_up
+      x: 414
+      y: 174
+      width: 108
+      height: 26
+      bg_color: 0x0b1828
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 8
+      widgets:
+        - label:
+            align: CENTER
+            text: "Auf"
+            text_font: roboto_european_core_18
+            text_color: 0x20b8e6
+      on_click:
+        then:
+          - homeassistant.service:
+              service: cover.open_cover
+              data:
+                entity_id: cover.rollladen_wz_schiebetur
+  - button:
+      id: rolladen_page_schiebetuer_stop
+      x: 532
+      y: 174
+      width: 108
+      height: 26
+      bg_color: 0x0b1828
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 8
+      widgets:
+        - label:
+            align: CENTER
+            text: "Stop"
+            text_font: roboto_european_core_18
+            text_color: 0xf4f8fc
+      on_click:
+        then:
+          - homeassistant.service:
+              service: cover.stop_cover
+              data:
+                entity_id: cover.rollladen_wz_schiebetur
+  - button:
+      id: rolladen_page_schiebetuer_down
+      x: 650
+      y: 174
+      width: 108
+      height: 26
+      bg_color: 0x0b1828
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 8
+      widgets:
+        - label:
+            align: CENTER
+            text: "Zu"
+            text_font: roboto_european_core_18
+            text_color: 0x20b8e6
+      on_click:
+        then:
+          - homeassistant.service:
+              service: cover.close_cover
+              data:
+                entity_id: cover.rollladen_wz_schiebetur
+  # Küche (cover.rollladen_kuche) - Rolladen: Auf/Stop/Zu + Positionsanzeige
+  - obj:
+      id: rolladen_page_kueche_panel
       x: 404
       y: 70
       width: 366
@@ -158,14 +364,14 @@ widgets:
       border_side: INTERNAL
       radius: 12
   - label:
-      id: rolladen_page_rolladen_2_label
+      id: rolladen_page_kueche_label
       x: 416
       y: 76
-      text: "Rolladen 2"
+      text: "Küche"
       text_font: roboto_european_core_18
       text_color: 0xf4f8fc
   - label:
-      id: rolladen_page_rolladen_2_position_value
+      id: rolladen_page_kueche_position_value
       x: 688
       y: 76
       width: 70
@@ -175,7 +381,7 @@ widgets:
       text_font: roboto_european_core_18
       text_color: 0x20b8e6
   - button:
-      id: rolladen_page_rolladen_2_up
+      id: rolladen_page_kueche_up
       x: 414
       y: 102
       width: 108
@@ -197,9 +403,9 @@ widgets:
           - homeassistant.service:
               service: cover.open_cover
               data:
-                entity_id: cover.rolladen_2
+                entity_id: cover.rollladen_kuche
   - button:
-      id: rolladen_page_rolladen_2_stop
+      id: rolladen_page_kueche_stop
       x: 532
       y: 102
       width: 108
@@ -221,9 +427,9 @@ widgets:
           - homeassistant.service:
               service: cover.stop_cover
               data:
-                entity_id: cover.rolladen_2
+                entity_id: cover.rollladen_kuche
   - button:
-      id: rolladen_page_rolladen_2_down
+      id: rolladen_page_kueche_down
       x: 650
       y: 102
       width: 108
@@ -245,4 +451,4 @@ widgets:
           - homeassistant.service:
               service: cover.close_cover
               data:
-                entity_id: cover.rolladen_2
+                entity_id: cover.rollladen_kuche

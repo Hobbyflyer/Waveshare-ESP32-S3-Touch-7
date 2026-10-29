@@ -11,13 +11,14 @@ obj:
   border_side: BOTTOM
   widgets:
     - label:
+        id: page_name_label
         align: LEFT_MID
-        text: "ESP32 | HA"
+        text: "Main"
         text_font: roboto_european_core_18
         text_color: 0x8297ad
     - label:
         align: CENTER
-        text: "Control System"
+        text: "Wohnzimmer"
         text_font: roboto_european_core
         text_color: 0xf4f8fc
     - label:

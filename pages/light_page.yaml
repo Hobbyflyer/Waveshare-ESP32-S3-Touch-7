@@ -74,51 +74,12 @@ widgets:
       bg_opa: 100%
       border_width: 0
       radius: 0
-  # TV (light.licht_tv) - Kurzdruck: ein/aus | Langdruck (0,7s): Detail-Ebene
-  - button:
-      id: light_page_tv_toggle
-      x: 30
-      y: 70
-      width: 366
-      height: 64
-      bg_color: 0x101f33
-      bg_opa: 80%
-      border_width: 1
-      border_color: 0x213955
-      border_side: INTERNAL
-      radius: 12
-      checked:
-        bg_color: 0x16445a
-        bg_opa: 100%
-        border_color: 0x20b8e6
-      widgets:
-        - label:
-            align: CENTER
-            text: "TV"
-            text_font: roboto_european_core_20
-            text_color: 0xf4f8fc
-      on_press:
-        then:
-          - lambda: 'id(touch_press_start) = millis();'
-      on_release:
-        then:
-          - if:
-              condition:
-                # >= 0,7s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
-                lambda: 'return (millis() - id(touch_press_start)) >= 700;'
-              then:
-                - lambda: 'lv_obj_clear_flag(id(light_page_tv_detail), LV_OBJ_FLAG_HIDDEN);'
-              else:
-                - homeassistant.service:
-                    service: light.toggle
-                    data:
-                      entity_id: light.licht_tv
-  # Wand links (light.wand_links) - Kurzdruck: ein/aus | Langdruck (0,7s): Detail-Ebene
+  # Wand links (light.wand_links) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
   - button:
       id: light_page_wand_links_toggle
-      x: 404
+      x: 30
       y: 70
-      width: 366
+      width: 241
       height: 64
       bg_color: 0x101f33
       bg_opa: 80%
@@ -143,8 +104,8 @@ widgets:
         then:
           - if:
               condition:
-                # >= 0,7s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
-                lambda: 'return (millis() - id(touch_press_start)) >= 700;'
+                # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
+                lambda: 'return (millis() - id(touch_press_start)) >= 500;'
               then:
                 - lambda: 'lv_obj_clear_flag(id(light_page_wand_links_detail), LV_OBJ_FLAG_HIDDEN);'
               else:
@@ -152,12 +113,12 @@ widgets:
                     service: light.toggle
                     data:
                       entity_id: light.wand_links
-  # Wand Mitte (light.wand_mitte) - Kurzdruck: ein/aus | Langdruck (0,7s): Detail-Ebene
+  # Wand Mitte (light.wand_mitte) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
   - button:
       id: light_page_wand_mitte_toggle
-      x: 30
-      y: 142
-      width: 366
+      x: 279
+      y: 70
+      width: 241
       height: 64
       bg_color: 0x101f33
       bg_opa: 80%
@@ -182,8 +143,8 @@ widgets:
         then:
           - if:
               condition:
-                # >= 0,7s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
-                lambda: 'return (millis() - id(touch_press_start)) >= 700;'
+                # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
+                lambda: 'return (millis() - id(touch_press_start)) >= 500;'
               then:
                 - lambda: 'lv_obj_clear_flag(id(light_page_wand_mitte_detail), LV_OBJ_FLAG_HIDDEN);'
               else:
@@ -191,12 +152,12 @@ widgets:
                     service: light.toggle
                     data:
                       entity_id: light.wand_mitte
-  # Wand rechts (light.wand_rechts) - Kurzdruck: ein/aus | Langdruck (0,7s): Detail-Ebene
+  # Wand rechts (light.wohnzimmer_wand_rechts) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
   - button:
       id: light_page_wand_rechts_toggle
-      x: 404
-      y: 142
-      width: 366
+      x: 529
+      y: 70
+      width: 241
       height: 64
       bg_color: 0x101f33
       bg_opa: 80%
@@ -221,21 +182,21 @@ widgets:
         then:
           - if:
               condition:
-                # >= 0,7s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
-                lambda: 'return (millis() - id(touch_press_start)) >= 700;'
+                # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
+                lambda: 'return (millis() - id(touch_press_start)) >= 500;'
               then:
                 - lambda: 'lv_obj_clear_flag(id(light_page_wand_rechts_detail), LV_OBJ_FLAG_HIDDEN);'
               else:
                 - homeassistant.service:
                     service: light.toggle
                     data:
-                      entity_id: light.wand_rechts
-  # Tür (light.licht_tuer) - Kurzdruck: ein/aus | Langdruck (0,7s): Detail-Ebene
+                      entity_id: light.wohnzimmer_wand_rechts
+  # Tür (light.licht_tuer) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
   - button:
       id: light_page_tuer_toggle
       x: 30
-      y: 214
-      width: 366
+      y: 142
+      width: 241
       height: 64
       bg_color: 0x101f33
       bg_opa: 80%
@@ -260,8 +221,8 @@ widgets:
         then:
           - if:
               condition:
-                # >= 0,7s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
-                lambda: 'return (millis() - id(touch_press_start)) >= 700;'
+                # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
+                lambda: 'return (millis() - id(touch_press_start)) >= 500;'
               then:
                 - lambda: 'lv_obj_clear_flag(id(light_page_tuer_detail), LV_OBJ_FLAG_HIDDEN);'
               else:
@@ -269,12 +230,12 @@ widgets:
                     service: light.toggle
                     data:
                       entity_id: light.licht_tuer
-  # Schrank (light.licht_schrank_mitte) - Kurzdruck: ein/aus | Langdruck (0,7s): Detail-Ebene
+  # Schrank mitte (light.licht_schrank_mitte) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
   - button:
       id: light_page_schrank_mitte_toggle
-      x: 404
+      x: 30
       y: 214
-      width: 366
+      width: 241
       height: 64
       bg_color: 0x101f33
       bg_opa: 80%
@@ -289,7 +250,7 @@ widgets:
       widgets:
         - label:
             align: CENTER
-            text: "Schrank"
+            text: "Schrank mitte"
             text_font: roboto_european_core_20
             text_color: 0xf4f8fc
       on_press:
@@ -299,8 +260,8 @@ widgets:
         then:
           - if:
               condition:
-                # >= 0,7s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
-                lambda: 'return (millis() - id(touch_press_start)) >= 700;'
+                # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
+                lambda: 'return (millis() - id(touch_press_start)) >= 500;'
               then:
                 - lambda: 'lv_obj_clear_flag(id(light_page_schrank_mitte_detail), LV_OBJ_FLAG_HIDDEN);'
               else:
@@ -308,12 +269,51 @@ widgets:
                     service: light.toggle
                     data:
                       entity_id: light.licht_schrank_mitte
-  # Esstisch (light.licht_esstisch) - Kurzdruck: ein/aus | Langdruck (0,7s): Detail-Ebene
+  # Schrank links (light.tz3000_el5kt5im_ts0502a) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
+  - button:
+      id: light_page_schrank_links_toggle
+      x: 279
+      y: 214
+      width: 241
+      height: 64
+      bg_color: 0x101f33
+      bg_opa: 80%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 12
+      checked:
+        bg_color: 0x16445a
+        bg_opa: 100%
+        border_color: 0x20b8e6
+      widgets:
+        - label:
+            align: CENTER
+            text: "Schrank links"
+            text_font: roboto_european_core_20
+            text_color: 0xf4f8fc
+      on_press:
+        then:
+          - lambda: 'id(touch_press_start) = millis();'
+      on_release:
+        then:
+          - if:
+              condition:
+                # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
+                lambda: 'return (millis() - id(touch_press_start)) >= 500;'
+              then:
+                - lambda: 'lv_obj_clear_flag(id(light_page_schrank_links_detail), LV_OBJ_FLAG_HIDDEN);'
+              else:
+                - homeassistant.service:
+                    service: light.toggle
+                    data:
+                      entity_id: light.tz3000_el5kt5im_ts0502a
+  # Esstisch (light.wohnzimmer_esstisch) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
   - button:
       id: light_page_esstisch_toggle
-      x: 30
-      y: 286
-      width: 366
+      x: 529
+      y: 214
+      width: 241
       height: 64
       bg_color: 0x101f33
       bg_opa: 80%
@@ -338,117 +338,15 @@ widgets:
         then:
           - if:
               condition:
-                # >= 0,7s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
-                lambda: 'return (millis() - id(touch_press_start)) >= 700;'
+                # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
+                lambda: 'return (millis() - id(touch_press_start)) >= 500;'
               then:
                 - lambda: 'lv_obj_clear_flag(id(light_page_esstisch_detail), LV_OBJ_FLAG_HIDDEN);'
               else:
                 - homeassistant.service:
                     service: light.toggle
                     data:
-                      entity_id: light.licht_esstisch
-  # Detail-Ebene TV: Helligkeit + Farbtemperatur
-  # WICHTIG: Wird vom Generator als LETZTES Widget der Seite erzeugt (Z-Order ganz oben)
-  - obj:
-      id: light_page_tv_detail
-      hidden: true
-      x: 100
-      y: 110
-      width: 600
-      height: 250
-      scrollable: false
-      bg_color: 0x0b1828
-      bg_opa: 100%
-      border_width: 1
-      border_color: 0x213955
-      border_side: INTERNAL
-      radius: 16
-      widgets:
-        - label:
-            x: 16
-            y: 12
-            text: "TV"
-            text_font: roboto_european_core
-            text_color: 0xf4f8fc
-        - button:
-            id: light_page_tv_detail_close
-            x: 544
-            y: 10
-            width: 40
-            height: 36
-            bg_color: 0x101f33
-            radius: 8
-            widgets:
-              - label:
-                  align: CENTER
-                  text: "X"
-                  text_font: roboto_european_core_20
-                  text_color: 0xf4f8fc
-            on_click:
-              then:
-                - lambda: 'lv_obj_add_flag(id(light_page_tv_detail), LV_OBJ_FLAG_HIDDEN);'
-        - label:
-            x: 20
-            y: 64
-            text: "Helligkeit"
-            text_font: roboto_european_core_18
-            text_color: 0x8297ad
-        - slider:
-            id: light_page_tv_brightness
-            x: 20
-            y: 92
-            width: 560
-            height: 18
-            min_value: 0
-            max_value: 255
-            bg_color: 0x0b1828
-            bg_opa: 60%
-            border_width: 1
-            border_color: 0x213955
-            border_side: INTERNAL
-            indicator:
-              bg_color: 0x20b8e6
-              bg_opa: 90%
-            knob:
-              bg_color: 0xFFFFFF
-            on_release:
-              then:
-                - homeassistant.service:
-                    service: light.turn_on
-                    data:
-                      entity_id: light.licht_tv
-                      brightness: !lambda 'return (int)x;'
-        - label:
-            x: 20
-            y: 140
-            text: "Farbtemperatur (2200-6500 K)"
-            text_font: roboto_european_core_18
-            text_color: 0x8297ad
-        - slider:
-            id: light_page_tv_color_temp
-            x: 20
-            y: 168
-            width: 560
-            height: 18
-            min_value: 2200
-            max_value: 6500
-            bg_color: 0x0b1828
-            bg_opa: 60%
-            border_width: 1
-            border_color: 0x213955
-            border_side: INTERNAL
-            indicator:
-              bg_color: 0xffd700
-              bg_opa: 90%
-            knob:
-              bg_color: 0xFFFFFF
-            on_release:
-              then:
-                - homeassistant.service:
-                    service: light.turn_on
-                    data:
-                      entity_id: light.licht_tv
-                      color_temp_kelvin: !lambda 'return (int)x;'
+                      entity_id: light.wohnzimmer_esstisch
   # Detail-Ebene Wand links: Helligkeit + Farbtemperatur
   # WICHTIG: Wird vom Generator als LETZTES Widget der Seite erzeugt (Z-Order ganz oben)
   - obj:
@@ -722,7 +620,7 @@ widgets:
                 - homeassistant.service:
                     service: light.turn_on
                     data:
-                      entity_id: light.wand_rechts
+                      entity_id: light.wohnzimmer_wand_rechts
                       brightness: !lambda 'return (int)x;'
         - label:
             x: 20
@@ -753,7 +651,7 @@ widgets:
                 - homeassistant.service:
                     service: light.turn_on
                     data:
-                      entity_id: light.wand_rechts
+                      entity_id: light.wohnzimmer_wand_rechts
                       color_temp_kelvin: !lambda 'return (int)x;'
   # Detail-Ebene Tür: Helligkeit + Farbtemperatur
   # WICHTIG: Wird vom Generator als LETZTES Widget der Seite erzeugt (Z-Order ganz oben)
@@ -857,7 +755,7 @@ widgets:
                     data:
                       entity_id: light.licht_tuer
                       color_temp_kelvin: !lambda 'return (int)x;'
-  # Detail-Ebene Schrank: Helligkeit + Farbtemperatur
+  # Detail-Ebene Schrank mitte: Helligkeit + Farbtemperatur
   # WICHTIG: Wird vom Generator als LETZTES Widget der Seite erzeugt (Z-Order ganz oben)
   - obj:
       id: light_page_schrank_mitte_detail
@@ -877,7 +775,7 @@ widgets:
         - label:
             x: 16
             y: 12
-            text: "Schrank"
+            text: "Schrank mitte"
             text_font: roboto_european_core
             text_color: 0xf4f8fc
         - button:
@@ -959,6 +857,108 @@ widgets:
                     data:
                       entity_id: light.licht_schrank_mitte
                       color_temp_kelvin: !lambda 'return (int)x;'
+  # Detail-Ebene Schrank links: Helligkeit + Farbtemperatur
+  # WICHTIG: Wird vom Generator als LETZTES Widget der Seite erzeugt (Z-Order ganz oben)
+  - obj:
+      id: light_page_schrank_links_detail
+      hidden: true
+      x: 100
+      y: 110
+      width: 600
+      height: 250
+      scrollable: false
+      bg_color: 0x0b1828
+      bg_opa: 100%
+      border_width: 1
+      border_color: 0x213955
+      border_side: INTERNAL
+      radius: 16
+      widgets:
+        - label:
+            x: 16
+            y: 12
+            text: "Schrank links"
+            text_font: roboto_european_core
+            text_color: 0xf4f8fc
+        - button:
+            id: light_page_schrank_links_detail_close
+            x: 544
+            y: 10
+            width: 40
+            height: 36
+            bg_color: 0x101f33
+            radius: 8
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "X"
+                  text_font: roboto_european_core_20
+                  text_color: 0xf4f8fc
+            on_click:
+              then:
+                - lambda: 'lv_obj_add_flag(id(light_page_schrank_links_detail), LV_OBJ_FLAG_HIDDEN);'
+        - label:
+            x: 20
+            y: 64
+            text: "Helligkeit"
+            text_font: roboto_european_core_18
+            text_color: 0x8297ad
+        - slider:
+            id: light_page_schrank_links_brightness
+            x: 20
+            y: 92
+            width: 560
+            height: 18
+            min_value: 0
+            max_value: 255
+            bg_color: 0x0b1828
+            bg_opa: 60%
+            border_width: 1
+            border_color: 0x213955
+            border_side: INTERNAL
+            indicator:
+              bg_color: 0x20b8e6
+              bg_opa: 90%
+            knob:
+              bg_color: 0xFFFFFF
+            on_release:
+              then:
+                - homeassistant.service:
+                    service: light.turn_on
+                    data:
+                      entity_id: light.tz3000_el5kt5im_ts0502a
+                      brightness: !lambda 'return (int)x;'
+        - label:
+            x: 20
+            y: 140
+            text: "Farbtemperatur (2200-6500 K)"
+            text_font: roboto_european_core_18
+            text_color: 0x8297ad
+        - slider:
+            id: light_page_schrank_links_color_temp
+            x: 20
+            y: 168
+            width: 560
+            height: 18
+            min_value: 2200
+            max_value: 6500
+            bg_color: 0x0b1828
+            bg_opa: 60%
+            border_width: 1
+            border_color: 0x213955
+            border_side: INTERNAL
+            indicator:
+              bg_color: 0xffd700
+              bg_opa: 90%
+            knob:
+              bg_color: 0xFFFFFF
+            on_release:
+              then:
+                - homeassistant.service:
+                    service: light.turn_on
+                    data:
+                      entity_id: light.tz3000_el5kt5im_ts0502a
+                      color_temp_kelvin: !lambda 'return (int)x;'
   # Detail-Ebene Esstisch: Helligkeit + Farbtemperatur
   # WICHTIG: Wird vom Generator als LETZTES Widget der Seite erzeugt (Z-Order ganz oben)
   - obj:
@@ -1028,7 +1028,7 @@ widgets:
                 - homeassistant.service:
                     service: light.turn_on
                     data:
-                      entity_id: light.licht_esstisch
+                      entity_id: light.wohnzimmer_esstisch
                       brightness: !lambda 'return (int)x;'
         - label:
             x: 20
@@ -1059,5 +1059,5 @@ widgets:
                 - homeassistant.service:
                     service: light.turn_on
                     data:
-                      entity_id: light.licht_esstisch
+                      entity_id: light.wohnzimmer_esstisch
                       color_temp_kelvin: !lambda 'return (int)x;'

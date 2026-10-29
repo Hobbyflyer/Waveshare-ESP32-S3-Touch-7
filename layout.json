@@ -14,9 +14,9 @@
 
         {"type": "clock", "key": "time_display", "grid": [2, 0, 2, 2]},
 
-        {"type": "sensor-value", "entity": "sensor.weather_temperature", "key": "weather_temperature", "name": "Aussen", "format": "%.1f °C", "grid": [2, 2]},
-        {"type": "sensor-value", "entity": "sensor.weather_humidity", "key": "weather_humidity", "name": "Feuchte", "format": "%.0f %%", "grid": [3, 2]},
-        {"type": "sensor-value", "entity": "sensor.weather_condition", "key": "weather_condition", "name": "Wetter", "text": true, "grid": [2, 3]}
+        {"type": "sensor-value", "entity": "weather.forecast_home", "attribute": "temperature", "key": "weather_temperature", "name": "Aussen", "format": "%.1f °C", "grid": [2, 2]},
+        {"type": "sensor-value", "entity": "weather.forecast_home", "attribute": "humidity", "key": "weather_humidity", "name": "Feuchte", "format": "%.0f %%", "grid": [3, 2]},
+        {"type": "light", "entity": "light.ambiente", "key": "ambiente", "name": "Ambiente", "grid": [2, 3]}
 
       ]
     },
@@ -24,14 +24,15 @@
     {
       "id": "light",
       "title": "Light",
+      "grid": {"columns": 3},
       "widgets": [
-        {"type": "light", "entity": "light.licht_tv", "key": "tv", "name": "TV", "grid": [0, 0]},
-        {"type": "light", "entity": "light.wand_links", "key": "wand_links", "name": "Wand links", "grid": [1, 0]},
-        {"type": "light", "entity": "light.wand_mitte", "key": "wand_mitte", "name": "Wand Mitte", "grid": [0, 1]},
-        {"type": "light", "entity": "light.wand_rechts", "key": "wand_rechts", "name": "Wand rechts", "grid": [1, 1]},
-        {"type": "light", "entity": "light.licht_tuer", "key": "tuer", "name": "Tür", "grid": [0, 2]},
-        {"type": "light", "entity": "light.licht_schrank_mitte", "key": "schrank_mitte", "name": "Schrank", "grid": [1, 2]},
-        {"type": "light", "entity": "light.licht_esstisch", "key": "esstisch", "name": "Esstisch", "grid": [0, 3]}
+        {"type": "light", "entity": "light.wand_links", "key": "wand_links", "name": "Wand links", "grid": [0, 0]},
+        {"type": "light", "entity": "light.wand_mitte", "key": "wand_mitte", "name": "Wand Mitte", "grid": [1, 0]},
+        {"type": "light", "entity": "light.wohnzimmer_wand_rechts", "key": "wand_rechts", "name": "Wand rechts", "grid": [2, 0]},
+        {"type": "light", "entity": "light.wohnzimmer_couch", "key": "tuercouch", "name": "Couch", "grid": [0, 1]},
+        {"type": "light", "entity": "light.licht_schrank_mitte", "key": "schrank_mitte", "name": "Schrank mitte", "grid": [0, 2]},
+        {"type": "light", "entity": "light.tz3000_el5kt5im_ts0502a", "key": "schrank_links", "name": "Schrank links", "grid": [1, 2]},
+        {"type": "light", "entity": "light.wohnzimmer_esstisch", "key": "esstisch", "name": "Esstisch", "grid": [2, 2]}
       ]
     },
 
@@ -39,8 +40,11 @@
       "id": "rolladen",
       "title": "Rolladen",
       "widgets": [
-        {"type": "cover", "entity": "cover.rolladen_1", "key": "rolladen_1", "name": "Rolladen 1", "grid": [0, 0]},
-        {"type": "cover", "entity": "cover.rolladen_2", "key": "rolladen_2", "name": "Rolladen 2", "grid": [1, 0]}
+        {"type": "cover", "entity": "cover.rollladen_wz_rechts", "key": "west", "name": "West", "grid": [0, 0]},
+        {"type": "cover", "entity": "cover.rollladen_wz_links", "key": "terrasse", "name": "Terrasse", "grid": [0, 1]},
+        {"type": "cover", "entity": "cover.rollladen_wz_schiebetur", "key": "schiebetuer", "name": "Schiebetür", "grid": [1, 1]},
+        {"type": "cover", "entity": "cover.rollladen_kuche", "key": "kueche", "name": "Küche", "grid": [1, 0]}
+
       ]
     },
 

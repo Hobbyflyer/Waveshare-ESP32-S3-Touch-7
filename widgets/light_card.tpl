@@ -1,4 +1,4 @@
-# ${name} (${entity}) - Kurzdruck: ein/aus | Langdruck (0,7s): Detail-Ebene
+# ${name} (${entity}) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
 - button:
     id: ${page}_page_${key}_toggle
     x: ${x}
@@ -28,8 +28,8 @@
       then:
         - if:
             condition:
-              # >= 0,7s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
-              lambda: 'return (millis() - id(touch_press_start)) >= 700;'
+              # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
+              lambda: 'return (millis() - id(touch_press_start)) >= 500;'
             then:
               - lambda: 'lv_obj_clear_flag(id(${page}_page_${key}_detail), LV_OBJ_FLAG_HIDDEN);'
             else:

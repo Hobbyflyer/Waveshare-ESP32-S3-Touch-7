@@ -3,18 +3,16 @@
 
 binary_sensor:
   - platform: homeassistant
-    entity_id: light.licht_tv
-    id: light_tv_state
+    entity_id: light.ambiente
+    id: light_ambiente_state
     internal: true
     on_state:
       then:
         - lambda: |-
-            if (id(light_page_tv_toggle) != nullptr) {
-              bool checked = lv_obj_has_state(id(light_page_tv_toggle), LV_STATE_CHECKED);
-              if (checked != (bool)x) {
-                if (x) { lv_obj_add_state(id(light_page_tv_toggle), LV_STATE_CHECKED); }
-                else   { lv_obj_clear_state(id(light_page_tv_toggle), LV_STATE_CHECKED); }
-              }
+            ESP_LOGD("ha_sync", "light.ambiente state = %s", x ? "ON" : "OFF");
+            if (id(main_page_ambiente_toggle) != nullptr) {
+              if (x) { lv_obj_add_state(id(main_page_ambiente_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(main_page_ambiente_toggle), LV_STATE_CHECKED); }
             }
 
   - platform: homeassistant
@@ -24,12 +22,10 @@ binary_sensor:
     on_state:
       then:
         - lambda: |-
+            ESP_LOGD("ha_sync", "light.wand_links state = %s", x ? "ON" : "OFF");
             if (id(light_page_wand_links_toggle) != nullptr) {
-              bool checked = lv_obj_has_state(id(light_page_wand_links_toggle), LV_STATE_CHECKED);
-              if (checked != (bool)x) {
-                if (x) { lv_obj_add_state(id(light_page_wand_links_toggle), LV_STATE_CHECKED); }
-                else   { lv_obj_clear_state(id(light_page_wand_links_toggle), LV_STATE_CHECKED); }
-              }
+              if (x) { lv_obj_add_state(id(light_page_wand_links_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(light_page_wand_links_toggle), LV_STATE_CHECKED); }
             }
 
   - platform: homeassistant
@@ -39,27 +35,23 @@ binary_sensor:
     on_state:
       then:
         - lambda: |-
+            ESP_LOGD("ha_sync", "light.wand_mitte state = %s", x ? "ON" : "OFF");
             if (id(light_page_wand_mitte_toggle) != nullptr) {
-              bool checked = lv_obj_has_state(id(light_page_wand_mitte_toggle), LV_STATE_CHECKED);
-              if (checked != (bool)x) {
-                if (x) { lv_obj_add_state(id(light_page_wand_mitte_toggle), LV_STATE_CHECKED); }
-                else   { lv_obj_clear_state(id(light_page_wand_mitte_toggle), LV_STATE_CHECKED); }
-              }
+              if (x) { lv_obj_add_state(id(light_page_wand_mitte_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(light_page_wand_mitte_toggle), LV_STATE_CHECKED); }
             }
 
   - platform: homeassistant
-    entity_id: light.wand_rechts
+    entity_id: light.wohnzimmer_wand_rechts
     id: light_wand_rechts_state
     internal: true
     on_state:
       then:
         - lambda: |-
+            ESP_LOGD("ha_sync", "light.wohnzimmer_wand_rechts state = %s", x ? "ON" : "OFF");
             if (id(light_page_wand_rechts_toggle) != nullptr) {
-              bool checked = lv_obj_has_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED);
-              if (checked != (bool)x) {
-                if (x) { lv_obj_add_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED); }
-                else   { lv_obj_clear_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED); }
-              }
+              if (x) { lv_obj_add_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED); }
             }
 
   - platform: homeassistant
@@ -69,12 +61,10 @@ binary_sensor:
     on_state:
       then:
         - lambda: |-
+            ESP_LOGD("ha_sync", "light.licht_tuer state = %s", x ? "ON" : "OFF");
             if (id(light_page_tuer_toggle) != nullptr) {
-              bool checked = lv_obj_has_state(id(light_page_tuer_toggle), LV_STATE_CHECKED);
-              if (checked != (bool)x) {
-                if (x) { lv_obj_add_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
-                else   { lv_obj_clear_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
-              }
+              if (x) { lv_obj_add_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
             }
 
   - platform: homeassistant
@@ -84,27 +74,36 @@ binary_sensor:
     on_state:
       then:
         - lambda: |-
+            ESP_LOGD("ha_sync", "light.licht_schrank_mitte state = %s", x ? "ON" : "OFF");
             if (id(light_page_schrank_mitte_toggle) != nullptr) {
-              bool checked = lv_obj_has_state(id(light_page_schrank_mitte_toggle), LV_STATE_CHECKED);
-              if (checked != (bool)x) {
-                if (x) { lv_obj_add_state(id(light_page_schrank_mitte_toggle), LV_STATE_CHECKED); }
-                else   { lv_obj_clear_state(id(light_page_schrank_mitte_toggle), LV_STATE_CHECKED); }
-              }
+              if (x) { lv_obj_add_state(id(light_page_schrank_mitte_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(light_page_schrank_mitte_toggle), LV_STATE_CHECKED); }
             }
 
   - platform: homeassistant
-    entity_id: light.licht_esstisch
+    entity_id: light.tz3000_el5kt5im_ts0502a
+    id: light_schrank_links_state
+    internal: true
+    on_state:
+      then:
+        - lambda: |-
+            ESP_LOGD("ha_sync", "light.tz3000_el5kt5im_ts0502a state = %s", x ? "ON" : "OFF");
+            if (id(light_page_schrank_links_toggle) != nullptr) {
+              if (x) { lv_obj_add_state(id(light_page_schrank_links_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(light_page_schrank_links_toggle), LV_STATE_CHECKED); }
+            }
+
+  - platform: homeassistant
+    entity_id: light.wohnzimmer_esstisch
     id: light_esstisch_state
     internal: true
     on_state:
       then:
         - lambda: |-
+            ESP_LOGD("ha_sync", "light.wohnzimmer_esstisch state = %s", x ? "ON" : "OFF");
             if (id(light_page_esstisch_toggle) != nullptr) {
-              bool checked = lv_obj_has_state(id(light_page_esstisch_toggle), LV_STATE_CHECKED);
-              if (checked != (bool)x) {
-                if (x) { lv_obj_add_state(id(light_page_esstisch_toggle), LV_STATE_CHECKED); }
-                else   { lv_obj_clear_state(id(light_page_esstisch_toggle), LV_STATE_CHECKED); }
-              }
+              if (x) { lv_obj_add_state(id(light_page_esstisch_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(light_page_esstisch_toggle), LV_STATE_CHECKED); }
             }
 
 sensor:
@@ -135,9 +134,10 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: sensor.weather_temperature
+    entity_id: weather.forecast_home
     id: weather_temperature
     internal: true
+    attribute: temperature
     on_value:
       then:
         - lambda: |-
@@ -146,9 +146,10 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: sensor.weather_humidity
+    entity_id: weather.forecast_home
     id: weather_humidity
     internal: true
+    attribute: humidity
     on_value:
       then:
         - lambda: |-
@@ -157,32 +158,32 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: light.licht_tv
-    id: light_tv_brightness
+    entity_id: light.ambiente
+    id: light_ambiente_brightness
     attribute: brightness
     internal: true
     on_value:
       then:
         - lambda: |-
-            if (!isnan(x) && id(light_page_tv_brightness) != nullptr) {
+            if (!isnan(x) && id(main_page_ambiente_brightness) != nullptr) {
               int v = (int)x;
-              if (lv_slider_get_value(id(light_page_tv_brightness)) != v) {
-                lv_slider_set_value(id(light_page_tv_brightness), v, LV_ANIM_OFF);
+              if (lv_slider_get_value(id(main_page_ambiente_brightness)) != v) {
+                lv_slider_set_value(id(main_page_ambiente_brightness), v, LV_ANIM_OFF);
               }
             }
 
   - platform: homeassistant
-    entity_id: light.licht_tv
-    id: light_tv_color_temp
+    entity_id: light.ambiente
+    id: light_ambiente_color_temp
     attribute: color_temp_kelvin
     internal: true
     on_value:
       then:
         - lambda: |-
-            if (!isnan(x) && id(light_page_tv_color_temp) != nullptr) {
+            if (!isnan(x) && id(main_page_ambiente_color_temp) != nullptr) {
               int v = (int)x;
-              if (lv_slider_get_value(id(light_page_tv_color_temp)) != v) {
-                lv_slider_set_value(id(light_page_tv_color_temp), v, LV_ANIM_OFF);
+              if (lv_slider_get_value(id(main_page_ambiente_color_temp)) != v) {
+                lv_slider_set_value(id(main_page_ambiente_color_temp), v, LV_ANIM_OFF);
               }
             }
 
@@ -247,7 +248,7 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: light.wand_rechts
+    entity_id: light.wohnzimmer_wand_rechts
     id: light_wand_rechts_brightness
     attribute: brightness
     internal: true
@@ -262,7 +263,7 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: light.wand_rechts
+    entity_id: light.wohnzimmer_wand_rechts
     id: light_wand_rechts_color_temp
     attribute: color_temp_kelvin
     internal: true
@@ -337,7 +338,37 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: light.licht_esstisch
+    entity_id: light.tz3000_el5kt5im_ts0502a
+    id: light_schrank_links_brightness
+    attribute: brightness
+    internal: true
+    on_value:
+      then:
+        - lambda: |-
+            if (!isnan(x) && id(light_page_schrank_links_brightness) != nullptr) {
+              int v = (int)x;
+              if (lv_slider_get_value(id(light_page_schrank_links_brightness)) != v) {
+                lv_slider_set_value(id(light_page_schrank_links_brightness), v, LV_ANIM_OFF);
+              }
+            }
+
+  - platform: homeassistant
+    entity_id: light.tz3000_el5kt5im_ts0502a
+    id: light_schrank_links_color_temp
+    attribute: color_temp_kelvin
+    internal: true
+    on_value:
+      then:
+        - lambda: |-
+            if (!isnan(x) && id(light_page_schrank_links_color_temp) != nullptr) {
+              int v = (int)x;
+              if (lv_slider_get_value(id(light_page_schrank_links_color_temp)) != v) {
+                lv_slider_set_value(id(light_page_schrank_links_color_temp), v, LV_ANIM_OFF);
+              }
+            }
+
+  - platform: homeassistant
+    entity_id: light.wohnzimmer_esstisch
     id: light_esstisch_brightness
     attribute: brightness
     internal: true
@@ -352,7 +383,7 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: light.licht_esstisch
+    entity_id: light.wohnzimmer_esstisch
     id: light_esstisch_color_temp
     attribute: color_temp_kelvin
     internal: true
@@ -367,39 +398,96 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: cover.rolladen_1
-    id: rolladen_1_position
+    entity_id: cover.rollladen_wz_rechts
+    id: west_position
     attribute: current_position
     internal: true
     on_value:
       then:
         - lambda: |-
-            if (id(rolladen_page_rolladen_1_position_value) != nullptr) {
-              if (isnan(x)) { lv_label_set_text(id(rolladen_page_rolladen_1_position_value), "-- %"); }
-              else { lv_label_set_text_fmt(id(rolladen_page_rolladen_1_position_value), "%.0f %%", x); }
+            if (id(rolladen_page_west_position_value) != nullptr) {
+              if (isnan(x)) { lv_label_set_text(id(rolladen_page_west_position_value), "-- %"); }
+              else { lv_label_set_text_fmt(id(rolladen_page_west_position_value), "%.0f %%", x); }
             }
 
   - platform: homeassistant
-    entity_id: cover.rolladen_2
-    id: rolladen_2_position
+    entity_id: cover.rollladen_wz_links
+    id: terrasse_position
     attribute: current_position
     internal: true
     on_value:
       then:
         - lambda: |-
-            if (id(rolladen_page_rolladen_2_position_value) != nullptr) {
-              if (isnan(x)) { lv_label_set_text(id(rolladen_page_rolladen_2_position_value), "-- %"); }
-              else { lv_label_set_text_fmt(id(rolladen_page_rolladen_2_position_value), "%.0f %%", x); }
+            if (id(rolladen_page_terrasse_position_value) != nullptr) {
+              if (isnan(x)) { lv_label_set_text(id(rolladen_page_terrasse_position_value), "-- %"); }
+              else { lv_label_set_text_fmt(id(rolladen_page_terrasse_position_value), "%.0f %%", x); }
             }
 
-text_sensor:
   - platform: homeassistant
-    entity_id: sensor.weather_condition
-    id: weather_condition
+    entity_id: cover.rollladen_wz_schiebetur
+    id: schiebetuer_position
+    attribute: current_position
     internal: true
     on_value:
       then:
         - lambda: |-
-            if (id(main_page_weather_condition_value) != nullptr) {
-              lv_label_set_text(id(main_page_weather_condition_value), x.c_str());
+            if (id(rolladen_page_schiebetuer_position_value) != nullptr) {
+              if (isnan(x)) { lv_label_set_text(id(rolladen_page_schiebetuer_position_value), "-- %"); }
+              else { lv_label_set_text_fmt(id(rolladen_page_schiebetuer_position_value), "%.0f %%", x); }
             }
+
+  - platform: homeassistant
+    entity_id: cover.rollladen_kuche
+    id: kueche_position
+    attribute: current_position
+    internal: true
+    on_value:
+      then:
+        - lambda: |-
+            if (id(rolladen_page_kueche_position_value) != nullptr) {
+              if (isnan(x)) { lv_label_set_text(id(rolladen_page_kueche_position_value), "-- %"); }
+              else { lv_label_set_text_fmt(id(rolladen_page_kueche_position_value), "%.0f %%", x); }
+            }
+
+script:
+  - id: sync_light_buttons
+    then:
+      - lambda: |-
+          ESP_LOGD("ha_sync", "Periodic sync of light button states");
+          if (id(light_ambiente_state).has_state() && id(main_page_ambiente_toggle) != nullptr) {
+            if (id(light_ambiente_state).state) { lv_obj_add_state(id(main_page_ambiente_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(main_page_ambiente_toggle), LV_STATE_CHECKED); }
+          }
+          if (id(light_wand_links_state).has_state() && id(light_page_wand_links_toggle) != nullptr) {
+            if (id(light_wand_links_state).state) { lv_obj_add_state(id(light_page_wand_links_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(light_page_wand_links_toggle), LV_STATE_CHECKED); }
+          }
+          if (id(light_wand_mitte_state).has_state() && id(light_page_wand_mitte_toggle) != nullptr) {
+            if (id(light_wand_mitte_state).state) { lv_obj_add_state(id(light_page_wand_mitte_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(light_page_wand_mitte_toggle), LV_STATE_CHECKED); }
+          }
+          if (id(light_wand_rechts_state).has_state() && id(light_page_wand_rechts_toggle) != nullptr) {
+            if (id(light_wand_rechts_state).state) { lv_obj_add_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED); }
+          }
+          if (id(light_tuer_state).has_state() && id(light_page_tuer_toggle) != nullptr) {
+            if (id(light_tuer_state).state) { lv_obj_add_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
+          }
+          if (id(light_schrank_mitte_state).has_state() && id(light_page_schrank_mitte_toggle) != nullptr) {
+            if (id(light_schrank_mitte_state).state) { lv_obj_add_state(id(light_page_schrank_mitte_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(light_page_schrank_mitte_toggle), LV_STATE_CHECKED); }
+          }
+          if (id(light_schrank_links_state).has_state() && id(light_page_schrank_links_toggle) != nullptr) {
+            if (id(light_schrank_links_state).state) { lv_obj_add_state(id(light_page_schrank_links_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(light_page_schrank_links_toggle), LV_STATE_CHECKED); }
+          }
+          if (id(light_esstisch_state).has_state() && id(light_page_esstisch_toggle) != nullptr) {
+            if (id(light_esstisch_state).state) { lv_obj_add_state(id(light_page_esstisch_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(light_page_esstisch_toggle), LV_STATE_CHECKED); }
+          }
+
+interval:
+  - interval: 5s
+    then:
+      - script.execute: sync_light_buttons

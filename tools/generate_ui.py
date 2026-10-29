@@ -303,12 +303,10 @@ def entity_blocks(kind, w, page):
     on_state:
       then:
         - lambda: |-
+            ESP_LOGD("ha_sync", "{entity} state = %s", x ? "ON" : "OFF");
             if (id({toggle_id}) != nullptr) {{
-              bool checked = lv_obj_has_state(id({toggle_id}), LV_STATE_CHECKED);
-              if (checked != (bool)x) {{
-                if (x) {{ lv_obj_add_state(id({toggle_id}), LV_STATE_CHECKED); }}
-                else   {{ lv_obj_clear_state(id({toggle_id}), LV_STATE_CHECKED); }}
-              }}
+              if (x) {{ lv_obj_add_state(id({toggle_id}), LV_STATE_CHECKED); }}
+              else   {{ lv_obj_clear_state(id({toggle_id}), LV_STATE_CHECKED); }}
             }}"""))
 
     if kind == "light":
@@ -423,6 +421,7 @@ def entity_blocks(kind, w, page):
 def build_entities_file(all_entities):
     sections = {"binary_sensor": [], "sensor": [], "text_sensor": []}
     seen = set()
+    sync_items = []
     for kind, w, page in all_entities:
         for section, block in entity_blocks(kind, w, page):
             entity_id = next(l.split("id: ")[1].strip() for l in block.splitlines()
@@ -431,6 +430,32 @@ def build_entities_file(all_entities):
                 sys.exit(f"FEHLER: Doppelte Entity-ID '{entity_id}'")
             seen.add(entity_id)
             sections[section].append(block)
+
+        if kind in ("light", "toggle"):
+            key, entity = w["key"], w["entity"]
+            domain = entity.split(".")[0]
+            toggle_id = f"{page}_page_{key}_toggle"
+            sensor_id = f"{domain}_{key}_state"
+            sync_items.append(
+                f"          if (id({sensor_id}).has_state() && id({toggle_id}) != nullptr) {{\n"
+                f"            if (id({sensor_id}).state) {{ lv_obj_add_state(id({toggle_id}), LV_STATE_CHECKED); }}\n"
+                f"            else {{ lv_obj_clear_state(id({toggle_id}), LV_STATE_CHECKED); }}\n"
+                f"          }}"
+            )
+
+    if sync_items:
+        sections["script"] = [
+            "  - id: sync_light_buttons\n"
+            "    then:\n"
+            "      - lambda: |-\n"
+            "          ESP_LOGD(\"ha_sync\", \"Periodic sync of light button states\");\n"
+            + "\n".join(sync_items)
+        ]
+        sections["interval"] = [
+            "  - interval: 5s\n"
+            "    then:\n"
+            "      - script.execute: sync_light_buttons"
+        ]
 
     out = []
     for section, blocks in sections.items():
@@ -443,7 +468,7 @@ def build_navigation_file(titles):
     quoted = ", ".join(f'"{t}"' for t in titles)
     return f"""script:
   # Seitenwechsel: Index aktualisieren (+direction, mit Wrap-Around)
-  # und Seitennamen im Footer setzen. Seitenliste kommt aus layout.json.
+  # und Seitennamen im Header setzen. Seitenliste kommt aus layout.json.
   - id: change_page
     parameters:
       direction: int

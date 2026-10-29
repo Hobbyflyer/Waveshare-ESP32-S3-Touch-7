@@ -3,7 +3,7 @@
 
 script:
   # Seitenwechsel: Index aktualisieren (+direction, mit Wrap-Around)
-  # und Seitennamen im Footer setzen. Seitenliste kommt aus layout.json.
+  # und Seitennamen im Header setzen. Seitenliste kommt aus layout.json.
   - id: change_page
     parameters:
       direction: int

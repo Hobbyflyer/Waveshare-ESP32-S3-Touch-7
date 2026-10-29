@@ -38,6 +38,7 @@ api:
   on_client_connected:
     # UI-State (Brightness/Timeout Slider) nach (Re-)Connect synchronisieren
     - script.execute: sync_ui_state
+    - script.execute: sync_light_buttons
     # WiFi-Label wieder aktiv schalten
     - lvgl.label.update:
         id: wifi_signal_label
@@ -58,3 +59,4 @@ esphome:
     then:
       # Initiale Synchronisation der Slider mit den restored States
       - script.execute: sync_ui_state
+      - script.execute: sync_light_buttons

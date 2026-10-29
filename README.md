@@ -119,20 +119,20 @@ Der Generator erzeugt daraus automatisch:
 ## ✨ Hauptmerkmale
 
 ### 📊 Persistenter Header
-- Durchgehende Leiste am oberen Rand (30 Pixel)
-- Zeigt WiFi-Signalstärke an
-- Sichtbar auf allen drei Seiten (Main, Light, Settings)
+- Durchgehende Leiste am oberen Rand
+- Zeigt Seitentitel, „Wohnzimmer" und WiFi-Signalstärke an
+- Sichtbar auf allen Seiten
 
 ### 🧭 Persistenter Footer
-- Navigation mit drei Buttons (Vorherige, Seitennummer, Nächste)
+- Navigation mit zwei Chevron-Icons ganz links und rechts
 - Verbindung mit Seiten-Navigation
 - Swipe-Gesten-Unterstützung (horizontal)
 
 ### 📱 Seiten-Navigation
 - **Main Page**: Thermostat (Kreis-Slider ohne Hintergrund-Ring), Uhr rechts oben, 2×3-Kachelmatrix (6 frei belegbare Sensor-Slots)
 - **Light Page**: Licht-Kacheln in zwei Ebenen:
-  - **Kurzdruck** (< 0,7 s): Licht ein/aus (Kachel leuchtet cyan bei „an")
-  - **Langdruck** (≥ 0,7 s): Detail-Panel mit **Helligkeits-** und **Farbtemperatur-Slider** (2200–6500 K), schließbar über „X"
+  - **Kurzdruck** (< 0,5 s): Licht ein/aus (Kachel leuchtet cyan bei „an")
+  - **Langdruck** (≥ 0,5 s): Detail-Panel mit **Helligkeits-** und **Farbtemperatur-Slider** (2200–6500 K), schließbar über „X"
 - **Rolladen Page**: Cover-Kacheln mit **Auf / Stop / Zu** und Positionsanzeige in %
 - **Settings Page**: Konfigurationsoptionen
 
@@ -151,7 +151,7 @@ Der Generator erzeugt daraus automatisch:
 - **Farbschema**: Dunkler Navy-Verlauf (0x07111F → 0x101F33) mit Karten in 0x101F33
 - **Akzente**: Cyan (0x20B8E6) für aktive Werte, dezente Rahmen in 0x213955
 - **Schriftarten**: Roboto (18, 20, 24, 48 und 96), inklusive Umlaute, ß und Gradzeichen
-- **Navigation**: Schmaler Header und zentrierte, abgerundete Footer-Kapsel
+- **Navigation**: Schmaler Header und Chevron-Buttons am linken und rechten Footer-Rand
 - **Hintergrund**: LVGL-Verlauf; keine externe Hintergrundgrafik erforderlich
 
 ## 🔧 Konfiguration

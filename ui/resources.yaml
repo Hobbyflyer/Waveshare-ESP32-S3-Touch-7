@@ -62,6 +62,14 @@ font:
       - "󰤨"  # wifi-strength-4 (voll)
       - "󰤮"  # wifi-strength-off-outline
 
+  # Material Design Icons – Navigation im Footer
+  - file: fonts/materialdesignicons-webfont.ttf
+    id: mdi_navigation
+    size: 24
+    glyphs:
+      - "󰅁"  # chevron-left
+      - "󰅂"  # chevron-right
+
 image:
   - platform: file
     file: images/main_bg.png
