@@ -191,9 +191,9 @@ widgets:
                     service: light.toggle
                     data:
                       entity_id: light.wohnzimmer_wand_rechts
-  # Tür (light.licht_tuer) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
+  # Couch (light.wohnzimmer_couch) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
   - button:
-      id: light_page_tuer_toggle
+      id: light_page_tuercouch_toggle
       x: 30
       y: 142
       width: 241
@@ -211,7 +211,7 @@ widgets:
       widgets:
         - label:
             align: CENTER
-            text: "Tür"
+            text: "Couch"
             text_font: roboto_european_core_20
             text_color: 0xf4f8fc
       on_press:
@@ -224,12 +224,12 @@ widgets:
                 # >= 0,5s gedrueckt -> Detail-Ebene oeffnen, sonst togglen
                 lambda: 'return (millis() - id(touch_press_start)) >= 500;'
               then:
-                - lambda: 'lv_obj_clear_flag(id(light_page_tuer_detail), LV_OBJ_FLAG_HIDDEN);'
+                - lambda: 'lv_obj_clear_flag(id(light_page_tuercouch_detail), LV_OBJ_FLAG_HIDDEN);'
               else:
                 - homeassistant.service:
                     service: light.toggle
                     data:
-                      entity_id: light.licht_tuer
+                      entity_id: light.wohnzimmer_couch
   # Schrank mitte (light.licht_schrank_mitte) - Kurzdruck: ein/aus | Langdruck (0,5s): Detail-Ebene
   - button:
       id: light_page_schrank_mitte_toggle
@@ -653,10 +653,10 @@ widgets:
                     data:
                       entity_id: light.wohnzimmer_wand_rechts
                       color_temp_kelvin: !lambda 'return (int)x;'
-  # Detail-Ebene Tür: Helligkeit + Farbtemperatur
+  # Detail-Ebene Couch: Helligkeit + Farbtemperatur
   # WICHTIG: Wird vom Generator als LETZTES Widget der Seite erzeugt (Z-Order ganz oben)
   - obj:
-      id: light_page_tuer_detail
+      id: light_page_tuercouch_detail
       hidden: true
       x: 100
       y: 110
@@ -673,11 +673,11 @@ widgets:
         - label:
             x: 16
             y: 12
-            text: "Tür"
+            text: "Couch"
             text_font: roboto_european_core
             text_color: 0xf4f8fc
         - button:
-            id: light_page_tuer_detail_close
+            id: light_page_tuercouch_detail_close
             x: 544
             y: 10
             width: 40
@@ -692,7 +692,7 @@ widgets:
                   text_color: 0xf4f8fc
             on_click:
               then:
-                - lambda: 'lv_obj_add_flag(id(light_page_tuer_detail), LV_OBJ_FLAG_HIDDEN);'
+                - lambda: 'lv_obj_add_flag(id(light_page_tuercouch_detail), LV_OBJ_FLAG_HIDDEN);'
         - label:
             x: 20
             y: 64
@@ -700,7 +700,7 @@ widgets:
             text_font: roboto_european_core_18
             text_color: 0x8297ad
         - slider:
-            id: light_page_tuer_brightness
+            id: light_page_tuercouch_brightness
             x: 20
             y: 92
             width: 560
@@ -722,7 +722,7 @@ widgets:
                 - homeassistant.service:
                     service: light.turn_on
                     data:
-                      entity_id: light.licht_tuer
+                      entity_id: light.wohnzimmer_couch
                       brightness: !lambda 'return (int)x;'
         - label:
             x: 20
@@ -731,7 +731,7 @@ widgets:
             text_font: roboto_european_core_18
             text_color: 0x8297ad
         - slider:
-            id: light_page_tuer_color_temp
+            id: light_page_tuercouch_color_temp
             x: 20
             y: 168
             width: 560
@@ -753,7 +753,7 @@ widgets:
                 - homeassistant.service:
                     service: light.turn_on
                     data:
-                      entity_id: light.licht_tuer
+                      entity_id: light.wohnzimmer_couch
                       color_temp_kelvin: !lambda 'return (int)x;'
   # Detail-Ebene Schrank mitte: Helligkeit + Farbtemperatur
   # WICHTIG: Wird vom Generator als LETZTES Widget der Seite erzeugt (Z-Order ganz oben)

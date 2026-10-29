@@ -55,16 +55,16 @@ binary_sensor:
             }
 
   - platform: homeassistant
-    entity_id: light.licht_tuer
-    id: light_tuer_state
+    entity_id: light.wohnzimmer_couch
+    id: light_tuercouch_state
     internal: true
     on_state:
       then:
         - lambda: |-
-            ESP_LOGD("ha_sync", "light.licht_tuer state = %s", x ? "ON" : "OFF");
-            if (id(light_page_tuer_toggle) != nullptr) {
-              if (x) { lv_obj_add_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
-              else   { lv_obj_clear_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
+            ESP_LOGD("ha_sync", "light.wohnzimmer_couch state = %s", x ? "ON" : "OFF");
+            if (id(light_page_tuercouch_toggle) != nullptr) {
+              if (x) { lv_obj_add_state(id(light_page_tuercouch_toggle), LV_STATE_CHECKED); }
+              else   { lv_obj_clear_state(id(light_page_tuercouch_toggle), LV_STATE_CHECKED); }
             }
 
   - platform: homeassistant
@@ -278,32 +278,32 @@ sensor:
             }
 
   - platform: homeassistant
-    entity_id: light.licht_tuer
-    id: light_tuer_brightness
+    entity_id: light.wohnzimmer_couch
+    id: light_tuercouch_brightness
     attribute: brightness
     internal: true
     on_value:
       then:
         - lambda: |-
-            if (!isnan(x) && id(light_page_tuer_brightness) != nullptr) {
+            if (!isnan(x) && id(light_page_tuercouch_brightness) != nullptr) {
               int v = (int)x;
-              if (lv_slider_get_value(id(light_page_tuer_brightness)) != v) {
-                lv_slider_set_value(id(light_page_tuer_brightness), v, LV_ANIM_OFF);
+              if (lv_slider_get_value(id(light_page_tuercouch_brightness)) != v) {
+                lv_slider_set_value(id(light_page_tuercouch_brightness), v, LV_ANIM_OFF);
               }
             }
 
   - platform: homeassistant
-    entity_id: light.licht_tuer
-    id: light_tuer_color_temp
+    entity_id: light.wohnzimmer_couch
+    id: light_tuercouch_color_temp
     attribute: color_temp_kelvin
     internal: true
     on_value:
       then:
         - lambda: |-
-            if (!isnan(x) && id(light_page_tuer_color_temp) != nullptr) {
+            if (!isnan(x) && id(light_page_tuercouch_color_temp) != nullptr) {
               int v = (int)x;
-              if (lv_slider_get_value(id(light_page_tuer_color_temp)) != v) {
-                lv_slider_set_value(id(light_page_tuer_color_temp), v, LV_ANIM_OFF);
+              if (lv_slider_get_value(id(light_page_tuercouch_color_temp)) != v) {
+                lv_slider_set_value(id(light_page_tuercouch_color_temp), v, LV_ANIM_OFF);
               }
             }
 
@@ -470,9 +470,9 @@ script:
             if (id(light_wand_rechts_state).state) { lv_obj_add_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED); }
             else { lv_obj_clear_state(id(light_page_wand_rechts_toggle), LV_STATE_CHECKED); }
           }
-          if (id(light_tuer_state).has_state() && id(light_page_tuer_toggle) != nullptr) {
-            if (id(light_tuer_state).state) { lv_obj_add_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
-            else { lv_obj_clear_state(id(light_page_tuer_toggle), LV_STATE_CHECKED); }
+          if (id(light_tuercouch_state).has_state() && id(light_page_tuercouch_toggle) != nullptr) {
+            if (id(light_tuercouch_state).state) { lv_obj_add_state(id(light_page_tuercouch_toggle), LV_STATE_CHECKED); }
+            else { lv_obj_clear_state(id(light_page_tuercouch_toggle), LV_STATE_CHECKED); }
           }
           if (id(light_schrank_mitte_state).has_state() && id(light_page_schrank_mitte_toggle) != nullptr) {
             if (id(light_schrank_mitte_state).state) { lv_obj_add_state(id(light_page_schrank_mitte_toggle), LV_STATE_CHECKED); }
